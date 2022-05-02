@@ -48,7 +48,7 @@ mount -o noatime,discard=async,subvol=@var_pkgs $BTRFS /mnt/var/cache/pacman/pkg
 mount $ESP /mnt/boot                #Mounts ESP
 #Install Microcode
 CPU=$(grep vendor_id /proc/cpuinfo)
-if [[ $CPU == *"AuthenticAMD"]] then
+if [[ $CPU == *"AuthenticAMD"* ]]; then
     microcode="amd-ucode"
 else
     microcode="intel-ucode"
