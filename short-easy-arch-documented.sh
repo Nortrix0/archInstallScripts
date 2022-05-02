@@ -76,7 +76,7 @@ COMPRESSION=(zstd)' >> /mnt/etc/mkinitcpio.conf
 UUID=$(blkid -s UUID -o value $CRYPTROOT)
 sed -i "s,^GRUB_CMDLINE_LINUX=\"\",GRUB_CMDLINE_LINUX=\"rd.luks.name=$UUID=cryptroot root=$BTRFS\",g" /mnt/etc/default/grub
 #Configure System //MKDIR etc/localtime?
-arch-chroot -h /mnt /bin/bash -e <<EOF
+arch-chroot /mnt /bin/bash -e <<EOF
     ln -sf /usr/share/zoneinfo/$(curl -s http://ip-api.com/line?fields=timezone) /etc/localtime
     hwclock --systohc
     locale-gen
