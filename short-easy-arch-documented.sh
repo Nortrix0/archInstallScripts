@@ -30,8 +30,6 @@ BTRFS="/dev/mapper/cryptroot"                                           #Maps th
 #Format LUKS Container as BTRFS
 mkfs.btrfs $BTRFS                   #Makes Conatiner BTRFS
 mount $BTRFS /mnt                   #Mounts BTRFS
-mkdir /mnt/boot                     #Make Boot folder
-mount $ESP /mnt/boot                #Mounts ESP
 #Create BTRFS subvolumes
 for volume in @ @home @root @srv @snapshots @var_log @var_pkgs
 do
@@ -47,6 +45,7 @@ mount -o noatime,discard=async,subvol=@srv $BTRFS /mnt/srv
 mount -o noatime,discard=async,subvol=@snapshots $BTRFS /mnt/.snapshots
 mount -o noatime,discard=async,subvol=@var_log $BTRFS /mnt/var/log
 mount -o noatime,discard=async,subvol=@var_pkgs $BTRFS /mnt/var/cache/pacman/pkg
+mount $ESP /mnt/boot                #Mounts ESP
 #Install Microcode
 CPU=$(grep vendor_id /proc/cpuinfo)
 if [[ $CPU == *"AuthenticAMD"]]; then
