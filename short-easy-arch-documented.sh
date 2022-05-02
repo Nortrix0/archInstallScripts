@@ -116,6 +116,7 @@ zram-size = min(ram, 8192)' >> /mnt/etc/systemd/zram-generator.conf
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
 for service in reflector.timer snapper-timeline.timer snapper-cleanup.timer btrfs-scrub@-.timer  btrfs-scrub@home.timer btrfs-scrub@var-log.timer btrfs-scrub@\\x2esnapshots.timer grub-btrfs.path systemd-oomd dhcpcd
+    echo "system enable ""$service"" --root=/mnt"
     systemctl enable "$service" --root=/mnt
 done
 exit
