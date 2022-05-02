@@ -1,4 +1,4 @@
-#!usr/bin/env -S bash -e
+#!/usr/bin/env -S bash -e
 #Vars
 DISK="/dev/sda"
 HOSTNAME="ArchAuto"
@@ -17,6 +17,7 @@ sgdisk -Zo $DISK    #Destroys existing GPT/MBR structures and clears out all par
 #, Sets partition as bootable, Create new partition Labelel CRYPTROOT that uses the rest of the drive space
 parted -s $DISK mklabel gpt mkpart ESP fat32 1MiB 513MiB set 1 esp on mkpart CRYPTROOT 513MiB 100%
 partprobe "$DISK"                   #Inform Kernel of changes
+sleep 1
 ESP="/dev/disk/by-partlabel/ESP"
 CRYPTROOT="/dev/disk/by-partlabel/CRYPTROOT"
 #Format ESP as FAT32
@@ -26,7 +27,7 @@ echo -n "$ENCRYPTPASS" | cryptsetup luksFormat "$CRYPTROOT" -d -        #Create 
 echo -n "$ENCRYPTPASS" | cryptsetup open "$CRYPTROOT" cryptroot -d -    #Unlocks the LUCKS Container
 BTRFS="/dev/mapper/cryptroot"                                           #Maps the Unlocked Conatiner to BTRFS
 #Format LUKS Container as BTRFS
-mkfs.btrfs $btrfs                   #Makes Conatiner BTRFS
+mkfs.btrfs $BTRFS                   #Makes Conatiner BTRFS
 mount $BTRFS /mnt                   #Mounts BTRFS
 mkdir /mnt/boot                     #Make Boot folder
 mount $ESP /mnt/boot                #Mounts ESP
