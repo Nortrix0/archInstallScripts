@@ -1,4 +1,5 @@
 #!/usr/bin/env -S bash -e
+set -x
 #Vars
 DISK="/dev/sda"
 HOSTNAME="ArchAuto"
@@ -36,7 +37,8 @@ for volume in @ @home @root @srv @snapshots @var_log @var_pkgs
 do
     btrfs subvolume create /mnt/$volume
 done
-#Mount new subvolumes
+#Mount only new subvolumes
+umount /mnt
 mount -o noatime,discard=async,subvol=@ $BTRFS /mnt
 mkdir -p /mnt/{home,root,srv,.snapshots,/var/log,/var/cache/pacman/pkg,boot}
 mount -o noatime,discard=async,subvol=@home $BTRFS /mnt/home
