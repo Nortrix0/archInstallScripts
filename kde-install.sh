@@ -1,35 +1,37 @@
+#xorg
+#kwin
+#sddm
 #konsole
 #dolphin
-#kinfocenter?
-#kate?
-#kwrite?
+#kinfocenter
+#kate
 #firefox
-#kget?
-#??kmail
-#krdc?
-#??kuickshow?
-#??kolourpaint
-#kmix?
-#vlc?
-#kmplayer
+#kget
+#kmail
+#vlc
 #kdeconnect
-#trach-cli?
-#??kdiff3?
-#krename?
+#kdiff3
+#krename
 #kfind
 #filelight
-#kdf?
 #htop
-#ksysguard?
-#??kjots?
-#kwalletmanager
-#??kontact
-#??korganizer
-#??kalendar-git??
+#kjots
+#kontact
+#korganizer
 #plasma-systemmonitor
-#sweeper
-#??kclock??
-#!!kalk??
-#!!kweather??
-#!!keysmith??
-#!!plasmatube??
+#spectacle
+#plasma-pa
+#plasma-disks
+#drkonqi
+#plasma-browser-integration
+#plasma-desktop
+#ssdm-kcm
+#networkmanager-qt
+#breeze-grub
+
+kwriteconfig5 --file /home/$NEWUSERNAME/.local/share/dolphin/view_properties/global/.direcotry --group Settings --key HiddenFilesShown --type bool false
+kwriteconfig5 --file /home/$NEWUSERNAME/.config/dolphinrc --group General --key BrowseThoughArchives --type bool true
+kwriteconfig5 --file /home/$NEWUSERNAME/.config/kdeglobals --group KDE --key LookAndFeelPackage org.kde.breezedark.desktop
+kwriteconfig5 --file /home/$NEWUSERNAME/.config/kdeglobals --group KSplash --key Theme None
+kwriteconfig5 --file /home/$NEWUSERNAME/.config/ksmserverrc --group General --key confirmLogout --type bool false
+
