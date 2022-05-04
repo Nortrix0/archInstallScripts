@@ -1,5 +1,5 @@
-pacstrap /mnt xorg kwin sddm konsole dolphin kinfocenter kate firefox kget kmail vlc kdeconnect kdiff3 krename kfind filelight htop kjots kontact korganizer plasma-systemmonitor spectacle plasma-pa plasma-disks drkonqi plasma-browser-integration plasma-desktop ssdm-kcm networkmanager-qt breeze-grub hunspell hunspell-en_us
-
+pacman -S xorg kwin sddm konsole dolphin kinfocenter kate firefox kget kmail vlc kdeconnect kdiff3 krename kfind filelight htop kjots kontact korganizer plasma-systemmonitor spectacle plasma-pa plasma-disks drkonqi plasma-browser-integration plasma-desktop ssdm-kcm networkmanager-qt breeze-grub hunspell hunspell-en_us
+systemctl enable sddm
 kwriteconfig5 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 5 --group Configuration --group General --key launchers preferred://browser,preferred://filemanager,applications:org.kde.konsole.desktop
 kwriteconfig5 --file ../.local/share/dolphin/view_properties/global/.direcotry --group Settings --key HiddenFilesShown --type bool false
 kwriteconfig5 --file dolphinrc --group General --key BrowseThoughArchives --type bool true
