@@ -1,0 +1,24 @@
+[CompatMode]
+FontWeight=50
+
+[DetailsMode]
+FontWeight=50
+
+[General]
+BrowseThroughArchives=true
+ShowFullPath=true
+ShowToolTips=true
+
+[IconsMode]
+FontWeight=50
+
+[KFileDialog Settings]
+Places Icon Auto-resize=flase
+Places Icon Static Size=22
+
+[MainWindow]
+MenuBar=Disabled
+ToolBarsMovable=Disabled
+
+[PreviewSettings]
+Plugins=appimagethumbnail,audiothumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,eboothumbnail,exrthumbnail,directorythumbnail,fontthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,svgthumbnail,textthumbnail
