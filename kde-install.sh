@@ -1,14 +1,26 @@
 if [ -z ${NEWUSERNAME+x}]; then
     NEWUSERNAME="root" 
     echo "USERNAME NOT SET, DEFAULTING TO $NEWUSERNAME"
-    read -p "Continue with $NEWUSERNAME?" -n 1 -r
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    read -p "Continue with $NEWUSERNAME? [Y/n]" -n 1 -r
+    if [[ $REPLY =~ ^[Nn]$ ]]
         then
         exit
     fi
 fi
-pacman -S xorg kwin sddm konsole dolphin kinfocenter kate firefox kget kmail vlc kdeconnect kdiff3 krename kfind filelight htop kjots kontact korganizer plasma-systemmonitor spectacle plasma-pa plasma-disks drkonqi plasma-browser-integration plasma-desktop ssdm-kcm networkmanager-qt breeze-grub hunspell hunspell-en_us
-systemctl enable sddm
+pacstrap /mnt xorg kwin sddm konsole dolphin kinfocenter kate firefox kmail kcalc vlc kdeconnect kfind filelight htop korganizer plasma-systemmonitor flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm breeze-grub hunspell hunspell-en_us
 
-cp -r ./KDE_Config_dotfiles /home/$NEWUSERNAME/
-cp -r ./KDE_LOCAL_dotfiles /home/$NEWUSERNAME/
+pacstrap /mnt xorg-server gnu-free-fonts pipewire-media-session jack2 phonon-qt5-vlc
+
+check kinfocenter plasma-nm
+
+systemctl enable sddm --root=/mnt
+
+mkdir /mnt/home/$NEWUSERNAME/.config
+cp -r ./KDE_Config_dotfiles/* "/mnt/home/$NEWUSERNAME/.config"
+mkdir /mnt/home/$NEWUSERNAME/.local
+cp -r ./KDE_Local_dotfiles/* "/mnt/home/$NEWUSERNAME/.local"
+
+arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUSERNAME/.local
+
+cd /mnt/usr/share/applications
+rm assistant.desktop avahi-discover.desktop bssh.desktop bvnc.desktop designer.desktop linguist.desktop org.kde.kuserfeedback-console.desktop qdbusviewer.desktop qv4l2.desktop qvidcap.desktop
