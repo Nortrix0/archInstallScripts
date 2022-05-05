@@ -7,11 +7,7 @@ if [ -z ${NEWUSERNAME+x}]; then
         exit
     fi
 fi
-pacstrap /mnt xorg kwin sddm konsole dolphin kinfocenter kate firefox kmail kcalc vlc kdeconnect kfind filelight htop korganizer plasma-systemmonitor flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm breeze-grub hunspell hunspell-en_us
-
-pacstrap /mnt xorg-server gnu-free-fonts pipewire-media-session jack2 phonon-qt5-vlc
-
-check kinfocenter plasma-nm
+pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vlc sddm konsole dolphin kwrite firefox kmail kcalc vlc kdeconnect kfind filelight htop korganizer plasma-systemmonitor flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm breeze-grub hunspell hunspell-en_us
 
 systemctl enable sddm --root=/mnt
 
@@ -23,4 +19,4 @@ cp -r ./KDE_Local_dotfiles/* "/mnt/home/$NEWUSERNAME/.local"
 arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUSERNAME/.local
 
 cd /mnt/usr/share/applications
-rm assistant.desktop avahi-discover.desktop bssh.desktop bvnc.desktop designer.desktop linguist.desktop org.kde.kuserfeedback-console.desktop qdbusviewer.desktop qv4l2.desktop qvidcap.desktop
+rm assistant.desktop avahi-discover.desktop bssh.desktop bvnc.desktop designer.desktop linguist.desktop org.kde.kuserfeedback-console.desktop org.kde.plasma.emojier.desktop qdbusviewer.desktop qv4l2.desktop qvidcap.desktop
