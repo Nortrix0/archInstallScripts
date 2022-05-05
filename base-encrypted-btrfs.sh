@@ -1,13 +1,20 @@
 #!/usr/bin/env -S bash -e
 set -xv
 #Vars
-DISK="/dev/sda"
-HOSTNAME="ArchAuto"
-ENCRYPTPASS="pass"
-ROOTPASS="pass"
-NEWUSERNAME="user"
-USERPASS="pass"
-KERNEL="linux"
+read -r -p "Enter the disk to install onto : " -i "/dev/sda" DISK
+#DISK=${disk:-"/dev/sda"}
+read -r -p "Enter the Hostname to use : " -i "AutoArch" HOSTNAME
+#HOSTNAME=${host:-"ArchAuto"}
+read -r -sp "Enter the password to use for encryption [password]: " epass
+ENCRYPTPASS=${epass:-"password"}
+read -r -sp "Enter the to use for root [password]: " rpass
+ROOTPASS=${rpass:-"password"}
+read -r -p "Enter your username [user]: " -i "user" NEWUSERNAME
+#NEWUSERNAME=${newuser:-"user"}
+read -r -sp "Enter password for $NEWUSERNAME [password]: " upass
+USERPASS=${upass:-"password"}
+read -r -p "Enter the desired kernel: " -i "linux" KERNEL
+#KERNEL="linux"
 #Clear Screen
 clear
 #Delete Old partition scheme

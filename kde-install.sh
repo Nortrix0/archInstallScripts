@@ -1,5 +1,6 @@
 if [ -z ${NEWUSERNAME+x}]; then
-    NEWUSERNAME="root" 
+    #NEWUSERNAME="root" 
+    NEWUSERNAME=$(ls -l /mnt/home/ | awk '/-/ {print $3}') 
     echo "USERNAME NOT SET, DEFAULTING TO $NEWUSERNAME"
     read -p "Continue with $NEWUSERNAME? [Y/n]" -n 1 -r
     if [[ $REPLY =~ ^[Nn]$ ]]
@@ -11,10 +12,11 @@ pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vl
 
 systemctl enable sddm --root=/mnt
 
-mkdir /mnt/home/$NEWUSERNAME/.config
-cp -r ./KDE_Config_dotfiles/* "/mnt/home/$NEWUSERNAME/.config"
-mkdir /mnt/home/$NEWUSERNAME/.local
-cp -r ./KDE_Local_dotfiles/* "/mnt/home/$NEWUSERNAME/.local"
+cd /mnt/home/*/
+mkdir .config
+cp -r ./KDE_Config_dotfiles/* /mnt/home/*/.config
+mkdir .local
+cp -r ./KDE_Local_dotfiles/* /mnt/home/*/.local
 
 arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUSERNAME/.local
 
