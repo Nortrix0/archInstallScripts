@@ -128,3 +128,4 @@ do
     echo "system enable ""$service"" --root=/mnt"
     systemctl enable "$service" --root=/mnt
 done
+export NEWUSERNAME

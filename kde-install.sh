@@ -14,10 +14,10 @@ pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vl
 
 systemctl enable sddm --root=/mnt
 
-mkdir /mnt/home/*/.config
-mkdir /mnt/home/*/.local
-cp -r KDE_Config_dotfiles/* /mnt/home/*/.config
-cp -r KDE_Local_dotfiles/* /mnt/home/*/.local
+mkdir /mnt/home/$NEWUSERNAME/.config
+mkdir /mnt/home/$NEWUSERNAME/.local
+cp -r KDE_Config_dotfiles/* /mnt/home/$NEWUSERNAME/.config
+cp -r KDE_Local_dotfiles/* /mnt/home/$NEWUSERNAME/.local
 
 arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUSERNAME/.local
 
