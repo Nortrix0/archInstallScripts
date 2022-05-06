@@ -1,6 +1,6 @@
 if [ -z ${NEWUSERNAME+x}]; then
     #NEWUSERNAME="root" 
-    NEWUSERNAME=$(ls -l /mnt/home/ | awk '/-/ {print $3}') 
+    NEWUSERNAME=$(arch-chroot /mnt bash -c "ls -l /home/ | grep -oE '[^ ]+$'" | tail -1) 
     echo "USERNAME NOT SET, DEFAULTING TO $NEWUSERNAME"
     read -p "Continue with $NEWUSERNAME? [Y/n]" -n 1 -r
     if [[ $REPLY =~ ^[Nn]$ ]]
