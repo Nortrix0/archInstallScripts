@@ -23,3 +23,6 @@ arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUS
 
 cd /mnt/usr/share/applications
 rm assistant.desktop avahi-discover.desktop bssh.desktop bvnc.desktop designer.desktop linguist.desktop org.kde.kuserfeedback-console.desktop org.kde.plasma.emojier.desktop qdbusviewer.desktop qv4l2.desktop qvidcap.desktop
+
+arch-chroot /mnt kwriteconfig5 --file /home/$NEWUSERNAME/.config/ksplashrc --group KSplash --key Engine none
+arch-chroot /mnt kwriteconfig5 --file /home/$NEWUSERNAME/.config/ksplashrc --group KSplash --key Theme None
