@@ -61,6 +61,7 @@ else
     microcode="intel-ucode"
 fi
 #Install base system
+pacman -Sy archlinux-keyring
 pacstrap /mnt --needed base $KERNEL $microcode linux-firmware $KERNEL-headers btrfs-progs grub grub-btrfs rsync efibootmgr snapper reflector base-devel snap-pac zram-generator vim nano dhcpcd
 echo "$HOSTNAME" > /mnt/etc/hostname
 #Generate fstab

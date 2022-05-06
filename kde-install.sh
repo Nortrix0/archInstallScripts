@@ -8,14 +8,14 @@ if [ -z ${NEWUSERNAME+x}]; then
         exit
     fi
 fi
+cd "${0%/*}"
+pacman -Sy archlinux-keyring
 pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vlc sddm konsole dolphin kwrite firefox kmail kcalc vlc kdeconnect kfind filelight htop korganizer plasma-systemmonitor flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm breeze-grub hunspell hunspell-en_us
 
 systemctl enable sddm --root=/mnt
 
-cd /mnt/home/*/
-mkdir .config
-mkdir .local
-cd "${0%/*}"
+mkdir /mnt/home/*/.config
+mkdir /mnt/home/*/.local
 cp -r KDE_Config_dotfiles/* /mnt/home/*/.config
 cp -r KDE_Local_dotfiles/* /mnt/home/*/.local
 
