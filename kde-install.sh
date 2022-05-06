@@ -9,7 +9,7 @@ if [ -z ${NEWUSERNAME+x}]; then
     fi
 fi
 cd "${0%/*}"
-pacman -Sy archlinux-keyring
+pacman -Sy archlinux-keyring --noconfirm
 pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vlc sddm konsole dolphin kwrite firefox kmail kcalc vlc kdeconnect kfind filelight htop korganizer plasma-systemmonitor flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm breeze-grub hunspell hunspell-en_us
 
 systemctl enable sddm --root=/mnt

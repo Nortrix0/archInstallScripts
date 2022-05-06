@@ -61,7 +61,7 @@ else
     microcode="intel-ucode"
 fi
 #Install base system
-pacman -Sy archlinux-keyring
+pacman -Sy archlinux-keyring --noconfirm
 pacstrap /mnt --needed base $KERNEL $microcode linux-firmware $KERNEL-headers btrfs-progs grub grub-btrfs rsync efibootmgr snapper reflector base-devel snap-pac zram-generator vim nano dhcpcd
 echo "$HOSTNAME" > /mnt/etc/hostname
 #Generate fstab
@@ -128,4 +128,3 @@ do
     echo "system enable ""$service"" --root=/mnt"
     systemctl enable "$service" --root=/mnt
 done
-exit
