@@ -14,9 +14,10 @@ systemctl enable sddm --root=/mnt
 
 cd /mnt/home/*/
 mkdir .config
-cp -r ./KDE_Config_dotfiles/* /mnt/home/*/.config
 mkdir .local
-cp -r ./KDE_Local_dotfiles/* /mnt/home/*/.local
+cd "${0%/*}"
+cp -r KDE_Config_dotfiles/* /mnt/home/*/.config
+cp -r KDE_Local_dotfiles/* /mnt/home/*/.local
 
 arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUSERNAME/.local
 
