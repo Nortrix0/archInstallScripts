@@ -8,6 +8,7 @@ if [ -z ${NEWUSERNAME+x}]; then
         exit
     fi
 fi
+set -xv
 cd "${0%/*}"
 pacman -Sy archlinux-keyring --noconfirm
 pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vlc sddm konsole dolphin kwrite firefox kmail kcalc vlc kdeconnect kfind filelight htop korganizer plasma-systemmonitor flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm breeze-grub hunspell hunspell-en_us
@@ -23,6 +24,3 @@ arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUS
 
 cd /mnt/usr/share/applications
 rm assistant.desktop avahi-discover.desktop bssh.desktop bvnc.desktop designer.desktop linguist.desktop org.kde.kuserfeedback-console.desktop org.kde.plasma.emojier.desktop qdbusviewer.desktop qv4l2.desktop qvidcap.desktop
-
-arch-chroot /mnt kwriteconfig5 --file /home/$NEWUSERNAME/.config/ksplashrc --group KSplash --key Engine none
-arch-chroot /mnt kwriteconfig5 --file /home/$NEWUSERNAME/.config/ksplashrc --group KSplash --key Theme None
