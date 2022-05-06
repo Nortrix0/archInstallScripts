@@ -1,7 +1,5 @@
 #!/usr/bin/env -S bash -e
 set -xv
-#Clear Screen
-clear
 #Vars
 read -e -p "Enter the disk to install onto : " -i "/dev/sda" DISK
 #DISK=${disk:-"/dev/sda"}
@@ -17,6 +15,8 @@ read -r -sp "Enter password for $NEWUSERNAME [password]: " upass
 USERPASS=${upass:-"password"}
 read -e -p "Enter the desired kernel: " -i "linux" KERNEL
 #KERNEL="linux"
+#Clear Screen
+clear
 #Delete Old partition scheme
 wipefs -af $DISK    #Force Wipe All on Disk
 sgdisk -Zo $DISK    #Destroys existing GPT/MBR structures and clears out all partition data
