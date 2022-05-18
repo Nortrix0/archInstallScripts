@@ -32,6 +32,12 @@ wallpaperplugin=org.kde.image
 immutability=1
 plugin=org.kde.plasma.digitalclock
 
+[Containments][2][Applets][16][Configuration]
+PreloadWeight=31
+
+[Containments][2][Applets][16][Configuration][Appearance]
+showSeconds=true
+
 [Containments][2][Applets][17]
 immutability=1
 plugin=org.kde.plasma.showdesktop
