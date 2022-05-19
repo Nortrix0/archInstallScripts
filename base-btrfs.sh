@@ -25,7 +25,7 @@ BTRFS="/dev/disk/by-partlabel/ROOT"
 #Format ESP as FAT32
 mkfs.fat -F 32 $ESP
 #Format ROOT as BTRFS
-mkfs.btrfs -f $BTRFS                   #Makes Conatiner BTRFS
+mkfs.btrfs -f $BTRFS                #Makes Conatiner BTRFS
 mount $BTRFS /mnt                   #Mounts BTRFS
 #Create BTRFS subvolumes
 for volume in @ @home @root @srv @snapshots @var_log @var_pkgs
