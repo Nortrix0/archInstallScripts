@@ -18,6 +18,9 @@ cp -r KDE_Config_dotfiles /mnt/home/$NEWUSERNAME/.config
 cp -r KDE_Local_dotfiles /mnt/home/$NEWUSERNAME/.local
 #khotkeysrc kglobalshortcutsrc
 
+sed -i 's|#GRUB_THEME=.*|GRUB_THEME="/usr/share/grub/themes/breeze/theme.txt"|' /mnt/etc/default/grub
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+
 arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUSERNAME/.local
 
 cd /mnt/usr/share/applications
