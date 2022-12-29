@@ -14,11 +14,8 @@ pacman -Sy archlinux-keyring --noconfirm
 pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vlc sddm konsole dolphin kwrite firefox kolourpaint kmail kcalc vlc kdeconnect kfind filelight htop korganizer plasma-systemmonitor khotkeys flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm breeze-grub hunspell hunspell-en_us
 
 systemctl enable sddm --root=/mnt
-
-mkdir /mnt/home/$NEWUSERNAME/.config
-mkdir /mnt/home/$NEWUSERNAME/.local
-cp -r KDE_Config_dotfiles/* /mnt/home/$NEWUSERNAME/.config
-cp -r KDE_Local_dotfiles/* /mnt/home/$NEWUSERNAME/.local
+cp -r KDE_Config_dotfiles /mnt/home/$NEWUSERNAME/.config
+cp -r KDE_Local_dotfiles /mnt/home/$NEWUSERNAME/.local
 #khotkeysrc kglobalshortcutsrc
 
 arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUSERNAME/.local
