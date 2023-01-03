@@ -83,8 +83,6 @@ arch-chroot /mnt /bin/bash -e <<EOF
     mkdir /.snapshots
     mount -a
     chmod 750 /.snapshots
-    grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
-    grub-mkconfig -o /boot/grub/grub.cfg
     echo "root:$ROOTPASS" | chpasswd
     useradd -m -G wheel -s /bin/bash "$NEWUSERNAME"
     sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
