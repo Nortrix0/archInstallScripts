@@ -52,7 +52,7 @@ else
 fi
 #Install base system
 pacman -Sy archlinux-keyring --noconfirm
-pacstrap /mnt --needed base $KERNEL $microcode linux-firmware $KERNEL-headers btrfs-progs grub grub-btrfs rsync efibootmgr snapper reflector base-devel snap-pac zram-generator vim nano dhcpcd
+pacstrap /mnt --needed base $KERNEL $microcode linux-firmware $KERNEL-headers btrfs-progs rsync efibootmgr snapper reflector base-devel snap-pac zram-generator vim nano dhcpcd
 echo "$HOSTNAME" > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -108,7 +108,7 @@ echo '
 zram-size = min(ram, 8192)' >> /mnt/etc/systemd/zram-generator.conf
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
-for service in reflector.timer snapper-timeline.timer snapper-cleanup.timer btrfs-scrub@-.timer  btrfs-scrub@home.timer btrfs-scrub@var-log.timer btrfs-scrub@\\x2esnapshots.timer grub-btrfs.path systemd-oomd dhcpcd
+for service in reflector.timer snapper-timeline.timer snapper-cleanup.timer btrfs-scrub@-.timer  btrfs-scrub@home.timer btrfs-scrub@var-log.timer btrfs-scrub@\\x2esnapshots.timer systemd-oomd dhcpcd
 do
     echo "system enable ""$service"" --root=/mnt"
     systemctl enable "$service" --root=/mnt
