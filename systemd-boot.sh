@@ -1,5 +1,5 @@
 arch-chroot /mnt /bin/bash -e <<EOF
-	bootctl --parth=/boot install
+	bootctl --path=/boot install
 	echo '
 title	Arch Linux
 linux	/vmlinuz-linux
