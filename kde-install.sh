@@ -11,7 +11,7 @@ fi
 set -xv
 cd "${0%/*}"
 pacman -Sy archlinux-keyring --noconfirm
-pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vlc sddm konsole dolphin kwrite firefox kolourpaint kmail kcalc vlc kdeconnect kfind filelight htop kalendar plasma-systemmonitor khotkeys flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm breeze-grub hunspell-en_us
+pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vlc sddm konsole dolphin kwrite firefox kolourpaint kmail kcalc vlc kdeconnect kfind filelight htop kalendar plasma-systemmonitor khotkeys flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm hunspell-en_us
 
 systemctl enable sddm --root=/mnt
 systemctl enable NetworkManager --root=/mnt
@@ -20,8 +20,11 @@ cp -r KDE_Config_dotfiles /mnt/home/$NEWUSERNAME/.config
 cp -r KDE_Local_dotfiles /mnt/home/$NEWUSERNAME/.local
 #khotkeysrc kglobalshortcutsrc
 
-sed -i 's|#GRUB_THEME=.*|GRUB_THEME="/usr/share/grub/themes/breeze/theme.txt"|' /mnt/etc/default/grub
-arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+if pacman -Qs grub > /dev/null; then
+    pacstrap /mnt breeze-grub
+    sed -i 's|#GRUB_THEME=.*|GRUB_THEME="/usr/share/grub/themes/breeze/theme.txt"|' /mnt/etc/default/grub
+    arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+fi
 
 arch-chroot /mnt chown -R "$NEWUSERNAME" /home/$NEWUSERNAME/.config /home/$NEWUSERNAME/.local
 
