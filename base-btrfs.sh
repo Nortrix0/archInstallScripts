@@ -18,8 +18,8 @@ sgdisk -Zo $DISK    #Destroys existing GPT/MBR structures and clears out all par
 #Doesn't ask for input from user, Creates New disklabel of type GPT, Create new partition Labeled ESP of type fat32 and is 512 MiB in size
 #, Sets partition as bootable, Create new partition Labeled ROOT that uses the rest of the drive space
 parted -s $DISK mklabel gpt mkpart ESP fat32 1MiB 513MiB set 1 esp on mkpart ROOT 513MiB 100%
-partprobe "$DISK"                   #Inform Kernel of changes
-sleep 1
+#partprobe "$DISK"                   #Inform Kernel of changes
+#sleep 1
 ESP="/dev/disk/by-partlabel/ESP"
 BTRFS="/dev/disk/by-partlabel/ROOT"
 #Format ESP as FAT32
@@ -28,17 +28,15 @@ mkfs.fat -F 32 $ESP
 mkfs.btrfs -f $BTRFS                #Makes Conatiner BTRFS
 mount $BTRFS /mnt                   #Mounts BTRFS
 #Create BTRFS subvolumes
-for volume in @ @home @root @srv @snapshots @var_log @var_pkgs
+for volume in @ @home @snapshots @var_log @var_pkgs
 do
     btrfs subvolume create /mnt/$volume
 done
 #Mount only new subvolumes
 umount /mnt
 mount -o noatime,discard=async,subvol=@ $BTRFS /mnt
-mkdir -p /mnt/{home,root,srv,.snapshots,/var/log,/var/cache/pacman/pkg,boot}
+mkdir -p /mnt/{home,.snapshots,/var/log,/var/cache/pacman/pkg,boot}
 mount -o noatime,discard=async,subvol=@home $BTRFS /mnt/home
-mount -o noatime,discard=async,subvol=@root $BTRFS /mnt/root
-mount -o noatime,discard=async,subvol=@srv $BTRFS /mnt/srv
 mount -o noatime,discard=async,subvol=@snapshots $BTRFS /mnt/.snapshots
 mount -o noatime,discard=async,subvol=@var_log $BTRFS /mnt/var/log
 mount -o noatime,discard=async,subvol=@var_pkgs $BTRFS /mnt/var/cache/pacman/pkg
@@ -52,7 +50,7 @@ else
 fi
 #Install base system
 pacman -Sy archlinux-keyring --noconfirm
-pacstrap /mnt --needed base $KERNEL $microcode linux-firmware $KERNEL-headers btrfs-progs rsync efibootmgr snapper reflector base-devel snap-pac zram-generator vim nano dhcpcd
+pacstrap /mnt --needed base $KERNEL $microcode btrfs-progs rsync snapper snap-pac vim nano dhcpcd sudo
 echo "$HOSTNAME" > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -66,11 +64,9 @@ echo '
 127.0.0.1   localhost
 ::1         localhost
 127.0.1.1   $hostname.localdomain   $hostname' >>/mnt/etc/hosts
-#Config mkinitcpio //CHANGE TO ECHO
-echo '
-HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems)
-COMPRESSION=(zstd)' >> /mnt/etc/mkinitcpio.conf
-#Configure System //MKDIR etc/localtime?
+#Config mkinitcpio
+echo 'HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems)' >> /mnt/etc/mkinitcpio.conf
+#Configure System
 arch-chroot /mnt /bin/bash -e <<EOF
     ln -sf /usr/share/zoneinfo/$(curl -s http://ip-api.com/line?fields=timezone) /etc/localtime
     hwclock --systohc
@@ -102,13 +98,9 @@ Depends = rsync
 Description = Backing up /boot
 When = PostTransaction
 Exec = /usr/bin/rsync -a --delete /boot /.bootbackup' >> /mnt/etc/pacman.d/hooks/50-bootbackup.hook
-#Configure ZRAM
-echo '
-[zram0]
-zram-size = min(ram, 8192)' >> /mnt/etc/systemd/zram-generator.conf
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
-for service in reflector.timer snapper-timeline.timer snapper-cleanup.timer btrfs-scrub@-.timer  btrfs-scrub@home.timer btrfs-scrub@var-log.timer btrfs-scrub@\\x2esnapshots.timer systemd-oomd dhcpcd
+for service in snapper-timeline.timer snapper-cleanup.timer btrfs-scrub@-.timer  btrfs-scrub@home.timer btrfs-scrub@var-log.timer btrfs-scrub@\\x2esnapshots.timer systemd-oomd dhcpcd
 do
     echo "system enable ""$service"" --root=/mnt"
     systemctl enable "$service" --root=/mnt
