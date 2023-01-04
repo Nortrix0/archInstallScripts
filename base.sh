@@ -3,7 +3,7 @@ set -xv
 #Vars
 read -e -p "Enter the disk to install onto : " -i "/dev/sda" DISK
 read -e -p "Enter the Hostname to use : " -i "AutoArch" HOSTNAME
-read -r -sp "Enter the password to use for root [password]: " rpass
+read -r -sp "Enter the password for root [password]: " rpass
 ROOTPASS=${rpass:-"password"}
 read -e -p "Enter your username [user]: " -i "user" NEWUSERNAME
 read -r -sp "Enter password for $NEWUSERNAME [password]: " upass
@@ -21,8 +21,8 @@ sgdisk -Zo $DISK    #Destroys existing GPT/MBR structures and clears out all par
 #Doesn't ask for input from user, Creates New disklabel of type GPT, Create new partition Labeled ESP of type fat32 and is 512 MiB in size
 #, Sets partition as bootable, Create new partition Labeled ROOT that uses the rest of the drive space
 parted -s $DISK mklabel gpt mkpart ESP fat32 1MiB 513MiB set 1 esp on mkpart ROOT 513MiB 100%
-#partprobe "$DISK"                   #Inform Kernel of changes
-#sleep 1
+partprobe "$DISK"                   #Inform Kernel of changes
+sleep 1
 ESP="/dev/disk/by-partlabel/ESP"
 #Format ESP as FAT32
 mkfs.fat -F 32 $ESP
