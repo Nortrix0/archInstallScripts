@@ -15,13 +15,15 @@ USERPASS=$(dialog --nocancel --passwordbox "Enter Pasword for $USER" 0 0 3>&1 1>
 FILESYS=$(dialog --nocancel --radiolist "Select Filesystem" 0 0 0 etx4 "" on btrfs "" off 3>&1 1>&2 2>&3 3>&-)
 BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
 GRAPHICAL=$(dialog --defaultno --yesno "Do You Want Console Only?" 0 0 3>&1 1>&2 2>&3 3>&-)
-CONFIGS=$(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-)
-ADVANCED=$(dialog --no-label "Manually Edit" --yes-label "Reboot" --yesno "What would you like to do?" 0 0 3>&1 1>&2 2>&3 3>&-)
+if [ $GRAPHICAL == "1"]
+	CONFIGS=$(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-)
+fi
 . ./base.sh
 . ./"$BOOTLOADER".sh
 if [ $GRAPHICAL == "1"]
 	. ./kde-install.sh
 fi
+ADVANCED=$(dialog --no-label "Manually Edit" --yes-label "Reboot" --yesno "What would you like to do?" 0 0 3>&1 1>&2 2>&3 3>&-)
 if [ $ADVANCED == "0"]
 	reboot
 else
