@@ -8,23 +8,23 @@ KERNEL=$(dialog --nocancel --radiolist "Select Kernel" 0 0 2 linux Stable on lin
 HOSTNAME=$(dialog --nocancel --inputbox "Enter Hostname" 0 0 "ArchAuto" 3>&1 1>&2 2>&3 3>&-)
 ROOTPASS=$(dialog --nocancel --passwordbox "Enter Pasword for Root" 0 0 3>&1 1>&2 2>&3 3>&-)
 USER=$(dialog --nocancel --inputbox "Enter Username" 0 0 "user" 3>&1 1>&2 2>&3 3>&-)
-while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]] do
+while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	USER=$(dialog --nocancel --inputbox "$USER Invalid Must Be At Most 32 Characters And lowercase" 0 0 $(echo "$USER" | tr '[:upper:]' '[:lower:]') 3>&1 1>&2 2>&3 3>&-)
 done
 USERPASS=$(dialog --nocancel --passwordbox "Enter Pasword for $USER" 0 0 3>&1 1>&2 2>&3 3>&-)
 FILESYS=$(dialog --nocancel --radiolist "Select Filesystem" 0 0 0 etx4 "" on btrfs "" off 3>&1 1>&2 2>&3 3>&-)
 BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
 GRAPHICAL=$(dialog --defaultno --yesno "Do You Want Console Only?" 0 0 3>&1 1>&2 2>&3 3>&-)
-if [ $GRAPHICAL == "1"]
+if [ $GRAPHICAL == "1"]; then
 	CONFIGS=$(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-)
 fi
 . ./base.sh
 . ./"$BOOTLOADER".sh
-if [ $GRAPHICAL == "1"]
+if [ $GRAPHICAL == "1"]; then
 	. ./kde-install.sh
 fi
 ADVANCED=$(dialog --no-label "Manually Edit" --yes-label "Reboot" --yesno "What would you like to do?" 0 0 3>&1 1>&2 2>&3 3>&-)
-if [ $ADVANCED == "0"]
+if [ $ADVANCED == "0"]; then
 	reboot
 else
 	clear
