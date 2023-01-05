@@ -17,3 +17,13 @@ BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boo
 GRAPHICAL=$(dialog --defaultno --yesno "Do You Want Console Only?" 0 0 3>&1 1>&2 2>&3 3>&-)
 CONFIGS=$(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-)
 ADVANCED=$(dialog --no-label "Manually Edit" --yes-label "Reboot" --yesno "What would you like to do?" 0 0 3>&1 1>&2 2>&3 3>&-)
+. ./base.sh
+. ./"$BOOTLOADER".sh
+if [ $GRAPHICAL == "1"]
+	. ./kde-install.sh
+fi
+if [ $ADVANCED == "0"]
+	reboot
+else
+	clear
+fi
