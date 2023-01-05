@@ -13,7 +13,7 @@ pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vl
 systemctl enable sddm --root=/mnt
 systemctl enable NetworkManager --root=/mnt
 
-if [ $CONFIGS == "0"]
+if [ $CONFIGS == "0"]; then
     cp -r KDE_Config_dotfiles /mnt/home/$NEWUSERNAME/.config
     cp -r KDE_Local_dotfiles /mnt/home/$NEWUSERNAME/.local
     #khotkeysrc kglobalshortcutsrc
