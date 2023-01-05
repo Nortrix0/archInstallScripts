@@ -1,4 +1,5 @@
-partuuid=$(blkid -s PARTUUID -o value /dev/"$DISK")
+root=$(lsblk -no NAME /dev/disk/by-partlabel/ROOT)
+partuuid=$(blkid -s PARTUUID -o value /dev/"$root")
 arch-chroot /mnt /bin/bash -e <<EOF
 	bootctl --path=/boot install
 	echo '
