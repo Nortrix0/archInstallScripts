@@ -44,13 +44,6 @@ genfstab -U /mnt >> /mnt/etc/fstab
 #Setup Locale
 echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
 echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
-#Setup Keyboard
-echo "KEYMAP=us" > /mnt/etc/vconsole.conf
-#Setup Hosts
-echo '
-127.0.0.1   localhost
-::1         localhost
-127.0.1.1   $hostname.localdomain   $hostname' >>/mnt/etc/hosts
 #Config mkinitcpio
 echo 'HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems)' >> /mnt/etc/mkinitcpio.conf
 #Configure System
@@ -66,4 +59,4 @@ arch-chroot /mnt /bin/bash -e <<EOF
 EOF
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
-systemctl enable dhcpcd -root/mnt
+systemctl enable dhcpcd --root=/mnt
