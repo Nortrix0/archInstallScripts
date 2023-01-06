@@ -30,6 +30,9 @@ if [[ $ENCRYPTPASS -ne "0" ]]; then
 fi
 . ./"$FILESYS".sh
 . ./base.sh
+if [[ $FILESYS -eq "btrfs" ]]; then
+	. ./btrfs-progs.sh
+fi
 . ./"$BOOTLOADER".sh
 if [[ $GRAPHICAL -eq "1" ]]; then
 	. ./kde-install.sh
