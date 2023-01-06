@@ -1,9 +1,5 @@
 #Determine Microcode
-if [[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]]; then
-    microcode="amd-ucode"
-else
-    microcode="intel-ucode"
-fi
+microcode=$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")
 #Install base system
 pacstrap /mnt --needed base $KERNEL $microcode vim nano dhcpcd sudo
 echo $HOSTNAME > /mnt/etc/hostname
