@@ -1,7 +1,6 @@
-btrfs=$([[ $ENCRYPTPASS -eq 0 ]] && echo "/dev/disk/by-partlabel/ROOT" || echo "/dev/mapper/CRYPTROOT")
 #Format ROOT as BTRFS
-mkfs.btrfs -f $btrfs                #Makes Conatiner BTRFS
-mount $btrfs /mnt                   #Mounts BTRFS
+mkfs.btrfs -f $ROOT                #Makes Conatiner BTRFS
+mount $ROOT /mnt                   #Mounts BTRFS
 #Create BTRFS subvolumes
 for volume in @ @home @snapshots @var_log @var_pkgs
 do
@@ -9,11 +8,11 @@ do
 done
 #Mount only new subvolumes
 umount /mnt
-mount -o noatime,discard=async,subvol=@ $btrfs /mnt
+mount -o noatime,discard=async,subvol=@ $ROOT /mnt
 mkdir -p /mnt/{home,.snapshots,/var/log,/var/cache/pacman/pkg}
-mount -o noatime,discard=async,subvol=@home $btrfs /mnt/home
-mount -o noatime,discard=async,subvol=@snapshots $btrfs /mnt/.snapshots
-mount -o noatime,discard=async,subvol=@var_log $btrfs /mnt/var/log
-mount -o noatime,discard=async,subvol=@var_pkgs $btrfs /mnt/var/cache/pacman/pkg
+mount -o noatime,discard=async,subvol=@home $ROOT /mnt/home
+mount -o noatime,discard=async,subvol=@snapshots $ROOT /mnt/.snapshots
+mount -o noatime,discard=async,subvol=@var_log $ROOT /mnt/var/log
+mount -o noatime,discard=async,subvol=@var_pkgs $ROOT /mnt/var/cache/pacman/pkg
 mkdir /mnt/boot
 mount $ESP /mnt/boot                #Mounts ESP

@@ -10,3 +10,4 @@ sleep 1
 esp="/dev/disk/by-partlabel/ESP"
 #Format ESP as FAT32
 mkfs.fat -F 32 $esp
+ROOT="/dev/disk/by-partlabel/ROOT"

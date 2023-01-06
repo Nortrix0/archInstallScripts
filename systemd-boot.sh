@@ -1,4 +1,4 @@
-root=$(lsblk -no NAME /dev/disk/by-partlabel/ROOT) #Need to Find a Better way to Find this for CRYPTROOT
+root=$(lsblk -no NAME $ROOT)
 partuuid=$(blkid -s PARTUUID -o value /dev/"$root")
 arch-chroot /mnt /bin/bash -e <<EOF
 	bootctl --path=/boot install
