@@ -16,7 +16,7 @@ while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 done
 USERPASS=$(dialog --nocancel --passwordbox "Enter Pasword for $USER" 0 0 3>&1 1>&2 2>&3 3>&-)
 FILESYS=$(dialog --nocancel --radiolist "Select Filesystem" 0 0 0 ext4 "" on btrfs "" off 3>&1 1>&2 2>&3 3>&-)
-if [[ $FILESYS -eq "btrfs" ]]; then
+if [[ $FILESYS == "btrfs" ]]; then
 	ENCRYPTPASS=$(dialog --nocancel --passwordbox "Enter Password for Encryption, Leave Blank If You Do Not Want Encryption" 0 0 3>&1 1>&2 2>&3 3>&-)
 fi
 BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
@@ -30,7 +30,7 @@ if [[ $ENCRYPTPASS -ne "0" ]]; then
 fi
 . ./"$FILESYS".sh
 . ./base.sh
-if [[ $FILESYS -eq "btrfs" ]]; then
+if [[ $FILESYS == "btrfs" ]]; then
 	. ./btrfs-progs.sh
 fi
 . ./"$BOOTLOADER".sh
