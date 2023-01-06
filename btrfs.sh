@@ -1,4 +1,4 @@
-btrfs="/dev/disk/by-partlabel/ROOT"
+btrfs=$([[ $ENCRYPTPASS -eq 0 ]] && echo "/dev/disk/by-partlabel/ROOT" || echo "/dev/mapper/CRYPTROOT")
 #Format ROOT as BTRFS
 mkfs.btrfs -f $btrfs                #Makes Conatiner BTRFS
 mount $btrfs /mnt                   #Mounts BTRFS
