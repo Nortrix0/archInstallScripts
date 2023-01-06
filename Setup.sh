@@ -24,6 +24,7 @@ GRAPHICAL=$($(dialog --defaultno --yesno "Do You Want Console Only?" 0 0 3>&1 1>
 if [[ $GRAPHICAL -eq "1" ]]; then
 	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo 0 || echo 1)
 fi
+. ./format.sh
 . ./base.sh
 . ./"$BOOTLOADER".sh
 if [[ $GRAPHICAL -eq "1" ]]; then
