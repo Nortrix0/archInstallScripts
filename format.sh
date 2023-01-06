@@ -10,6 +10,3 @@ sleep 1
 esp="/dev/disk/by-partlabel/ESP"
 #Format ESP as FAT32
 mkfs.fat -F 32 $esp
-. ./"$FILESYS".sh
-mkdir /mnt/boot
-mount $esp /mnt/boot                #Mounts ESP
