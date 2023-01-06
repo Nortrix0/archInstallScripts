@@ -1,4 +1,4 @@
-root=$(lsblk -no NAME /dev/disk/by-partlabel/ROOT)
+root=$(lsblk -no NAME /dev/disk/by-partlabel/ROOT) #Need to Find a Better way to Find this for CRYPTROOT
 partuuid=$(blkid -s PARTUUID -o value /dev/"$root")
 arch-chroot /mnt /bin/bash -e <<EOF
 	bootctl --path=/boot install
@@ -8,7 +8,7 @@ linux	/vmlinuz-linux
 initrd	/intel-ucode.img
 initrd	/initramfs-linux.img
 options	root="PARTUUID=$partuuid" rw'>> /boot/loader/entries/arch.conf
-if [[ $FILESYS -eq "btrfs" ]]; then
+if [[ $FILESYS == "btrfs" ]]; then
 	echo ' rootflags=subvol=/@'  >> /boot/loader/entries/arch.conf
 fi
 EOF
