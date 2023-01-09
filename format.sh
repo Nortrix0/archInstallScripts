@@ -7,7 +7,7 @@ sgdisk -Zo $DISK    #Destroys existing GPT/MBR structures and clears out all par
 parted -s $DISK mklabel gpt mkpart ESP fat32 1MiB 513MiB set 1 esp on mkpart ROOT 513MiB 100%
 partprobe "$DISK"                   #Inform Kernel of changes
 sleep 1
-esp="/dev/disk/by-partlabel/ESP"
+ESP="/dev/disk/by-partlabel/ESP"
 #Format ESP as FAT32
-mkfs.fat -F 32 $esp
+mkfs.fat -F 32 $ESP
 ROOT="/dev/disk/by-partlabel/ROOT"
