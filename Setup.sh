@@ -37,7 +37,7 @@ fi
 if [[ $GRAPHICAL -eq "1" ]]; then
 	. ./kde-install.sh
 fi
-ADVANCED=$($(dialog --no-label "Manually Edit" --yes-label "Reboot" --yesno "What would you like to do?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo 1 || echo 0)
+ADVANCED=$($(dialog --no-label "Manually Edit" --yes-label "Reboot" --yesno "What would you like to do?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo 0 || echo 1)
 if [[ $ADVANCED -eq "0" ]]; then
 	reboot
 else
