@@ -1,5 +1,7 @@
 if [ -z ${USER+x}]; then
-    USER=$(arch-chroot /mnt bash -c "ls -l /home/ | grep -oE '[^ ]+$'" | tail -1) 
+    USER=$(arch-chroot /mnt bash -c "ls -l /home/ | grep -oE '[^ ]+$'" | tail -1)
+    #"'"
+    #Used to fix formating on github
     echo "USERNAME NOT SET, DEFAULTING TO $USER"
     read -p "Continue with $USER? [Y/n]" -n 1 -r
     if [[ $REPLY =~ ^[Nn]$ ]]
@@ -13,7 +15,7 @@ pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vl
 systemctl enable sddm --root=/mnt
 systemctl enable NetworkManager --root=/mnt
 
-if [ $CONFIGS == "0"]; then
+if [ $CONFIGS == "Yes"]; then
     cp -r KDE_Config_dotfiles /mnt/home/$USER/.config
     cp -r KDE_Local_dotfiles /mnt/home/$USER/.local
     #khotkeysrc kglobalshortcutsrc
