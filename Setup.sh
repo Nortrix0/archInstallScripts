@@ -14,17 +14,15 @@ while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	USER=$(dialog --nocancel --inputbox "$USER Invalid Must Be At Most 32 Characters And lowercase" 0 0 $(echo "$USER" | tr '[:upper:]' '[:lower:]') 3>&1 1>&2 2>&3 3>&-)
 done
 USERPASS=$(dialog --nocancel --passwordbox "Enter Pasword for $USER" 0 0 3>&1 1>&2 2>&3 3>&-)
-FILESYS=$(dialog --nocancel --radiolist "Select Filesystem" 0 0 0 ext4 "" on btrfs "" off 3>&1 1>&2 2>&3 3>&-)
-if [[ $FILESYS == "btrfs" ]]; then
-	ENCRYPTPASS=$(dialog --nocancel --passwordbox "Enter Password for Encryption, Leave Blank If You Do Not Want Encryption" 0 0 3>&1 1>&2 2>&3 3>&-)
-fi
+FILESYS=$(dialog --nocancel --radiolist "Select Filesystem" 0 0 0 btrfs "" on ext4 "" off 3>&1 1>&2 2>&3 3>&-)
+ENCRYPTPASS=$(dialog --nocancel --passwordbox "Enter Password for Encryption, Leave Blank If You Do Not Want Encryption" 0 0 3>&1 1>&2 2>&3 3>&-)
 BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
-GRAPHICAL=$($(dialog --defaultno --yesno "Do You Want Console Only?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo 0 || echo 1)
-if [[ $GRAPHICAL -eq "1" ]]; then
-	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo 0 || echo 1)
+DESKTOP=$(dialog --nocancel --radiolist "Which Desktop Do You Want?" 0 0 0 KDE "" on Console "" off 3>&1 1>&2 2>&3 3>&-)
+if [[ $DESKTOP == "KDE" ]]; then
+	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 fi
 . ./format.sh
-if [[ $ENCRYPTPASS -ne "0" ]]; then
+if [[ $ENCRYPTPASS == "" ]]; then
 	. ./encrypt.sh
 fi
 . ./"$FILESYS".sh
@@ -33,11 +31,11 @@ if [[ $FILESYS == "btrfs" ]]; then
 	. ./btrfs-progs.sh
 fi
 . ./"$BOOTLOADER".sh
-if [[ $GRAPHICAL -eq "1" ]]; then
+if [[ $DESKTOP == "KDE" ]]; then
 	. ./kde-install.sh
 fi
-ADVANCED=$($(dialog --no-label "Manually Edit" --yes-label "Reboot" --yesno "What would you like to do?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo 0 || echo 1)
-if [[ $ADVANCED -eq "0" ]]; then
+ADVANCED=$(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-)
+if [[ $ADVANCED == "Reboot" ]]; then
 	reboot
 else
 	clear
