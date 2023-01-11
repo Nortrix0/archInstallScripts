@@ -7,8 +7,9 @@ title	Arch Linux
 linux	/vmlinuz-linux
 initrd	/intel-ucode.img
 initrd	/initramfs-linux.img
-options	root="PARTUUID=$partuuid" rw'>> /boot/loader/entries/arch.conf
+options	root="PARTUUID=$partuuid"'>> /boot/loader/entries/arch.conf
 if [[ $FILESYS == "btrfs" ]]; then
 	echo ' rootflags=subvol=/@'  >> /boot/loader/entries/arch.conf
 fi
+echo ' rw' >> /boot/loader/entries/arch.conf
 EOF
