@@ -31,6 +31,9 @@ DESKTOP=$(dialog --nocancel --radiolist "Which Desktop Do You Want?" 0 0 0 KDE "
 if [[ $DESKTOP == "KDE" ]]; then
 	cat ./KDE/packages.txt >> ./Base/packages.txt
 	cat ./KDE/services.txt >> ./Base/services.txt
+	if [[ $BOOTLOADER == "grub" ]]; then
+		echo "breeze-grub" >> ./Base/packages.txt
+	fi
 	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 fi
 . ./Base/format.sh
@@ -40,8 +43,8 @@ fi
 . ./"$FILESYS"/install.sh
 . ./Base/base.sh
 . ./"$BOOTLOADER"/install.sh
-if [[ $DESKTOP == "KDE" ]]; then
-	. ./KDE/install.sh
+if [[ $CONFIGS == "Yes" ]]; then
+	. ./KDE/configure.sh
 fi
 ADVANCED=$(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ $ADVANCED == "Reboot" ]]; then
