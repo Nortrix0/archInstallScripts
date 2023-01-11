@@ -38,9 +38,6 @@ if [[ $ENCRYPTPASS == "" ]]; then
 fi
 . ./"$FILESYS"/install.sh
 . ./Base/base.sh
-if [[ $FILESYS == "btrfs" ]]; then
-	. ./btrfs/btrfs-progs.sh
-fi
 . ./"$BOOTLOADER"/install.sh
 if [[ $DESKTOP == "KDE" ]]; then
 	. ./KDE/install.sh
