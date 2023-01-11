@@ -28,6 +28,5 @@ if [ $CONFIGS == "Yes"]; then
 
     arch-chroot /mnt chown -R "$USER" /home/$USER/.config /home/$USER/.local
 
-    cd /mnt/usr/share/applications
-    rm assistant.desktop avahi-discover.desktop bssh.desktop bvnc.desktop designer.desktop linguist.desktop org.kde.kuserfeedback-console.desktop org.kde.plasma.emojier.desktop qdbusviewer.desktop qv4l2.desktop qvidcap.desktop
+    rm /mnt/usr/share/applications/{assistant.desktop,avahi-discover.desktop,bssh.desktop,bvnc.desktop,designer.desktop,linguist.desktop,org.kde.kuserfeedback-console.desktop,org.kde.plasma.emojier.desktop,qdbusviewer.desktop,qv4l2.desktop,qvidcap.desktop}
 fi
