@@ -17,19 +17,19 @@ done
 USERPASS=$(dialog --nocancel --passwordbox "Enter Pasword for $USER" 0 0 3>&1 1>&2 2>&3 3>&-)
 FILESYS=$(dialog --nocancel --radiolist "Select Filesystem" 0 0 0 btrfs "" on ext4 "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $FILESYS == "btrfs" ]]; then
-	cat ./btrfs/packages.txt >> /Base/packages.txt
-	cat ./btrfs/services.txt >> /Base/services.txt
+	cat ./btrfs/packages.txt >> ./Base/packages.txt
+	cat ./btrfs/services.txt >> ./Base/services.txt
 fi
 ENCRYPTPASS=$(dialog --nocancel --passwordbox "Enter Password for Encryption, Leave Blank If You Do Not Want Encryption" 0 0 3>&1 1>&2 2>&3 3>&-)
 BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $BOOTLOADER == "grub" ]]; then
-	cat ./grub/packages.txt >> /Base/packages.txt
-	cat ./grub/services.txt >> /Base/services.txt
+	cat ./grub/packages.txt >> ./Base/packages.txt
+	cat ./grub/services.txt >> ./Base/services.txt
 fi
 DESKTOP=$(dialog --nocancel --radiolist "Which Desktop Do You Want?" 0 0 0 KDE "" on Console "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $DESKTOP == "KDE" ]]; then
-	cat ./KDE/packages.txt >> /Base/packages.txt
-	cat ./KDE/services.txt >> /Base/services.txt
+	cat ./KDE/packages.txt >> ./Base/packages.txt
+	cat ./KDE/services.txt >> ./Base/services.txt
 	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 fi
 . ./Base/format.sh
