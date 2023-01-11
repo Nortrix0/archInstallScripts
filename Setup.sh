@@ -1,3 +1,4 @@
+cd "${0%/*}"
 clear
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
