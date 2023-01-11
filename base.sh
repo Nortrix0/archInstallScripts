@@ -1,7 +1,7 @@
 #Determine Microcode
 microcode=$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")
 #Install base system
-pacstrap /mnt --needed base $KERNEL linux-firmware $microcode vim nano dhcpcd sudo
+pacstrap /mnt --needed base $KERNEL linux-firmware $microcode efibootmgr vim nano dhcpcd sudo
 echo $HOSTNAME > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
