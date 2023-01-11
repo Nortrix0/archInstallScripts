@@ -1,7 +1,7 @@
 base
-$KERNEL
+KERNEL
 linux-firmware
-$microcode
+microcode
 efibootmgr
 vim
 nano
