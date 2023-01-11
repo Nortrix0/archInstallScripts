@@ -37,7 +37,7 @@ if [[ $DESKTOP == "KDE" ]]; then
 	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 fi
 . ./Base/format.sh
-if [[ $ENCRYPTPASS == "" ]]; then
+if [[ $ENCRYPTPASS != "" ]]; then
 	. ./Base/encrypt.sh
 fi
 . ./"$FILESYS"/install.sh
