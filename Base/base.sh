@@ -1,5 +1,5 @@
 #Determine Microcode
-sed -i 's|$microcode|$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")|'
+sed -i 's|$microcode|$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")|' ./Base/packages.txt
 #Install base system
 pacstrap /mnt --needed - < ./Base/packages.txt
 echo $HOSTNAME > /mnt/etc/hostname
