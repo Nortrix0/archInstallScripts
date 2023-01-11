@@ -1,0 +1,4 @@
+btrfs-progs
+rsync
+snapper
+snap-pac

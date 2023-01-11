@@ -1,0 +1,9 @@
+base
+$KERNEL
+linux-firmware
+$microcode
+efibootmgr
+vim
+nano
+dhcpcd
+sudo

@@ -1,7 +1,7 @@
 #Determine Microcode
-microcode=$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")
+sed -i 's|$microcode|$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")|'
 #Install base system
-pacstrap /mnt --needed base $KERNEL linux-firmware $microcode efibootmgr vim nano dhcpcd sudo
+pacstrap /mnt --needed - < ./packages.txt
 echo $HOSTNAME > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -19,4 +19,6 @@ useradd -mG wheel -p $USERPASS -R /mnt "$USER"
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
-systemctl enable dhcpcd --root=/mnt
+while read s; do
+	systemctl enable $s --root=/mnt
+done <./Base/services.txt

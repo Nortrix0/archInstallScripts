@@ -9,15 +9,10 @@ if [ -z ${USER+x}]; then
         exit
     fi
 fi
-cd "${0%/*}"
-pacstrap /mnt xorg-server gnu-free-fonts wireplumber pipewire-jack phonon-qt5-vlc sddm konsole dolphin kwrite firefox kolourpaint kmail kcalc vlc kdeconnect kfind filelight htop kalendar plasma-systemmonitor khotkeys flameshot plasma-pa plasma-disks plasma-browser-integration plasma-desktop plasma-nm hunspell-en_us
-
-systemctl enable sddm --root=/mnt
-systemctl enable NetworkManager --root=/mnt
 
 if [ $CONFIGS == "Yes"]; then
-    cp -r KDE_Config_dotfiles /mnt/home/$USER/.config
-    cp -r KDE_Local_dotfiles /mnt/home/$USER/.local
+    cp -r ./KDE/KDE_Config_dotfiles /mnt/home/$USER/.config
+    cp -r ./KDE/KDE_Local_dotfiles /mnt/home/$USER/.local
     #khotkeysrc kglobalshortcutsrc
 
     if [ $BOOTLOADER == "grub" ]; then
