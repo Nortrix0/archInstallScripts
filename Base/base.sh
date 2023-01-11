@@ -1,7 +1,7 @@
 #Determine Microcode
 sed -i 's|$microcode|$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")|'
 #Install base system
-pacstrap /mnt --needed - < ./packages.txt
+pacstrap /mnt --needed - < ./Base/packages.txt
 echo $HOSTNAME > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
