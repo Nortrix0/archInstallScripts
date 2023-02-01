@@ -26,3 +26,4 @@ plasma-browser-integration
 plasma-desktop
 plasma-nm
 hunspell-en_us
+steam
