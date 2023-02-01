@@ -1,14 +1,3 @@
-if [ -z ${USER+x}]; then
-    USER=$(arch-chroot /mnt bash -c "ls -l /home/ | grep -oE '[^ ]+$'" | tail -1)
-    #"'"
-    #Used to fix formating on github
-    echo "USERNAME NOT SET, DEFAULTING TO $USER"
-    read -p "Continue with $USER? [Y/n]" -n 1 -r
-    if [[ $REPLY =~ ^[Nn]$ ]]
-        then
-        exit
-    fi
-fi
 cp -r ./KDE/KDE_Config_dotfiles /mnt/home/$USER/.config
 cp -r ./KDE/KDE_Local_dotfiles /mnt/home/$USER/.local
 #khotkeysrc kglobalshortcutsrc
