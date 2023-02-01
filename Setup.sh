@@ -49,6 +49,7 @@ if [[ $DESKTOP == "KDE" ]]; then
 		echo -e "lib32-nvidia-utils\n" >> ./Base/packages.txt
 		echo -e "lib32-systemd\n" >> ./Base/packages.txt
 	fi
+	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /mnt/etc/pacman.conf
 fi
 . ./Base/format.sh
