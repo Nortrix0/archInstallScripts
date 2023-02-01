@@ -16,13 +16,15 @@ while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	USER=$(dialog --nocancel --inputbox "$USER Invalid Must Be At Most 32 Characters And lowercase" 0 0 $(echo "$USER" | tr '[:upper:]' '[:lower:]') 3>&1 1>&2 2>&3 3>&-)
 done
 USERPASS=$(dialog --nocancel --passwordbox "Enter Pasword for $USER" 0 0 3>&1 1>&2 2>&3 3>&-)
-FILESYS=$(dialog --nocancel --radiolist "Select Filesystem" 0 0 0 btrfs "" on ext4 "" off 3>&1 1>&2 2>&3 3>&-)
+FILESYS=btrfs
+#FILESYS=$(dialog --nocancel --radiolist "Select Filesystem" 0 0 0 btrfs "" on ext4 "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $FILESYS == "btrfs" ]]; then
 	cat ./btrfs/packages.txt >> ./Base/packages.txt
 	cat ./btrfs/services.txt >> ./Base/services.txt
 fi
 ENCRYPTPASS=$(dialog --nocancel --passwordbox "Enter Password for Encryption, Leave Blank If You Do Not Want Encryption" 0 0 3>&1 1>&2 2>&3 3>&-)
-BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
+BOOTLOADER=grub
+#BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $BOOTLOADER == "grub" ]]; then
 	cat ./grub/packages.txt >> ./Base/packages.txt
 	cat ./grub/services.txt >> ./Base/services.txt
