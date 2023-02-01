@@ -37,7 +37,7 @@ if [[ $DESKTOP == "KDE" ]]; then
 		echo "breeze-grub\n" >> ./Base/packages.txt
 	fi
 	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
-	GRAPHICS=$(dialog --nocancel --radiolist "Which Graphics Driver Do You Want" 0 0 0 AMD "" on Intel "" off NVIDIA "" off)
+	GRAPHICS=$(dialog --nocancel --radiolist "Which Graphics Driver Do You Want" 0 0 0 AMD "" on Intel "" off NVIDIA "" off 3>&1 1>&2 2>&3 3>&-)
 	if [[ $GRAPHICS == "AMD" ]]; then
 		echo "lib32-vulkan-radeon\n" >> ./Base/packages.txt
 	fi
