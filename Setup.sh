@@ -34,9 +34,21 @@ if [[ $DESKTOP == "KDE" ]]; then
 	cat ./KDE/packages.txt >> ./Base/packages.txt
 	cat ./KDE/services.txt >> ./Base/services.txt
 	if [[ $BOOTLOADER == "grub" ]]; then
-		echo "breeze-grub" >> ./Base/packages.txt
+		echo "breeze-grub\n" >> ./Base/packages.txt
 	fi
 	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
+	GRAPHICS=$(dialog --nocancel --radiolist "Which Graphics Driver Do You Want" 0 0 0 AMD "" on Intel "" off NVIDIA "" off)
+	if [[ $GRAPHICS == "AMD" ]]; then
+		echo "lib32-vulkan-radeon\n" >> ./Base/packages.txt
+	fi
+	if [[ $GRAPHICS == "Intel" ]]; then
+		echo "lib32-vulkan-intel\n" >> ./Base/packages.txt
+		echo "vulkan-intel\n" >> ./Base/packages.txt
+	fi
+	if [[ $GRAPHICS == "NVIDIA" ]]; then
+		echo "lib32-nvidia-utils\n" >> ./Base/packages.txt
+		echo "lib32-systemd\n" >> ./Base/packages.txt
+	fi
 fi
 . ./Base/format.sh
 if [[ $ENCRYPTPASS != "" ]]; then
