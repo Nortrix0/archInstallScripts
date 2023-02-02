@@ -16,7 +16,7 @@ ln -sfr /mnt/usr/share/zoneinfo/America/Chicago /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
 arch-chroot /mnt locale-gen
 echo "root:$ROOTPASS" | chpasswd -R /mnt
-useradd -mG wheel -p $USERPASS -R /mnt "$USER"
+useradd -mG wheel -p "$USERPASS" -R /mnt "$USER"
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
