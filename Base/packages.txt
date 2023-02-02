@@ -7,3 +7,5 @@ vim
 nano
 dhcpcd
 sudo
+git
+fakeroot
