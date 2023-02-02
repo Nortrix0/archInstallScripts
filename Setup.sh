@@ -54,7 +54,6 @@ if [[ $DESKTOP == "KDE" ]]; then
 		echo -e "vulkan-virtio\n" >> ./Base/packages.txt
 	fi
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
-	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /mnt/etc/pacman.conf
 fi
 . ./Base/format.sh
 if [[ $ENCRYPTPASS != "" ]]; then
@@ -63,6 +62,9 @@ fi
 . ./"$FILESYS"/install.sh
 . ./Base/base.sh
 . ./"$BOOTLOADER"/install.sh
+if [[ $DESKTOP == "KDE" ]]; then
+	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /mnt/etc/pacman.conf
+fi
 if [[ $CONFIGS == "Yes" ]]; then
 	. ./KDE/configure.sh
 fi
