@@ -21,6 +21,7 @@ plasma-systemmonitor
 khotkeys
 flameshot
 plasma-pa
+pipewire-pulse
 plasma-disks
 plasma-browser-integration
 plasma-desktop
