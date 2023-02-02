@@ -23,8 +23,8 @@ if [[ $FILESYS == "btrfs" ]]; then
 	cat ./btrfs/services.txt >> ./Base/services.txt
 fi
 ENCRYPTPASS=$(dialog --nocancel --passwordbox "Enter Password for Encryption, Leave Blank If You Do Not Want Encryption" 0 0 3>&1 1>&2 2>&3 3>&-)
-BOOTLOADER=grub
-#BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
+#BOOTLOADER=grub
+BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $BOOTLOADER == "grub" ]]; then
 	cat ./grub/packages.txt >> ./Base/packages.txt
 	cat ./grub/services.txt >> ./Base/services.txt
