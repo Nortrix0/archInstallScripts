@@ -5,7 +5,6 @@ microcode
 efibootmgr
 vim
 nano
-dhcpcd
 sudo
 git
 fakeroot
