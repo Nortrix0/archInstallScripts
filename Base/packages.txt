@@ -1,10 +1,9 @@
 base
+base-devel
 KERNEL
 linux-firmware
 microcode
 efibootmgr
 vim
 nano
-sudo
 git
-fakeroot
