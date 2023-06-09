@@ -55,3 +55,5 @@ sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/e
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./Base/services.txt
+arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
