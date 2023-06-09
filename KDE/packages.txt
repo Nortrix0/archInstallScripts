@@ -28,3 +28,4 @@ plasma-desktop
 plasma-nm
 hunspell-en_us
 steam
+breeze-grub
