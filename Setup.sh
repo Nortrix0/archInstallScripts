@@ -16,27 +16,10 @@ while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	USER=$(dialog --nocancel --inputbox "$USER Invalid Must Be At Most 32 Characters And lowercase" 0 0 $(echo "$USER" | tr '[:upper:]' '[:lower:]') 3>&1 1>&2 2>&3 3>&-)
 done
 USERPASS=$(dialog --nocancel --passwordbox "Enter Password for $USER" 0 0 3>&1 1>&2 2>&3 3>&-)
-#FILESYS=btrfs
-#FILESYS=$(dialog --nocancel --radiolist "Select Filesystem" 0 0 0 btrfs "" on ext4 "" off 3>&1 1>&2 2>&3 3>&-)
-#if [[ $FILESYS == "btrfs" ]]; then
-#	cat ./btrfs/packages.txt >> ./Base/packages.txt
-#	cat ./btrfs/services.txt >> ./Base/services.txt
-#fi
-#ENCRYPTPASS=""
-#ENCRYPTPASS=$(dialog --nocancel --passwordbox "Enter Password for Encryption, Leave Blank If You Do Not Want Encryption" 0 0 3>&1 1>&2 2>&3 3>&-)
-#BOOTLOADER=grub
-#BOOTLOADER=$(dialog --nocancel --radiolist "Select Bootloader" 0 0 0 systemd-boot "" on grub "" off 3>&1 1>&2 2>&3 3>&-)
-#if [[ $BOOTLOADER == "grub" ]]; then
-#	cat ./grub/packages.txt >> ./Base/packages.txt
-#	cat ./grub/services.txt >> ./Base/services.txt
-#fi
 DESKTOP=$(dialog --nocancel --radiolist "Which Desktop Do You Want?" 0 0 0 KDE "" on Console "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $DESKTOP == "KDE" ]]; then
 	cat ./KDE/packages.txt >> ./Base/packages.txt
 	cat ./KDE/services.txt >> ./Base/services.txt
-#	if [[ $BOOTLOADER == "grub" ]]; then
-#		echo -e "breeze-grub\n" >> ./Base/packages.txt
-#	fi
 	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 	GRAPHICS=$(dialog --nocancel --radiolist "Which Graphics Driver Do You Want" 0 0 0 AMD "" on Intel "" off NVIDIA "" off VirtIO "" off 3>&1 1>&2 2>&3 3>&-)
 	if [[ $GRAPHICS == "AMD" ]]; then
@@ -56,13 +39,7 @@ if [[ $DESKTOP == "KDE" ]]; then
 	fi
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
 fi
-#. ./Base/format.sh
-#if [[ $ENCRYPTPASS != "" ]]; then
-#	. ./Base/encrypt.sh
-#fi
-#. ./"$FILESYS"/install.sh
 . ./Base/base.sh
-#. ./"$BOOTLOADER"/install.sh
 if [[ $DESKTOP == "KDE" ]]; then
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /mnt/etc/pacman.conf
 fi
