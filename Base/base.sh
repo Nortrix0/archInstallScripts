@@ -15,7 +15,7 @@ ROOT="/dev/disk/by-partlabel/ROOT"
 mkfs.btrfs -f $ROOT                #Makes Conatiner BTRFS
 mount $ROOT /mnt                   #Mounts BTRFS
 #Create BTRFS subvolumes
-for volume in @ @home @snapshots @var_log @var_pkgs
+for volume in @ @home @var_log @var_pkgs
 do
     btrfs subvolume create /mnt/$volume
 done
@@ -41,7 +41,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
 echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
 #Config mkinitcpio
-echo 'HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems)' >> /mnt/etc/mkinitcpio.conf
+sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect keyboard modconf block sd-encrypt filesystems grub-btrfs-overlayfs)' >> /mnt/etc/mkinitcpio.conf
 #Configure System
 ln -sfr /mnt/usr/share/zoneinfo/America/Chicago /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
@@ -52,6 +52,12 @@ echo "$USER:$USERPASS" | chpasswd -R /mnt
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
+arch-chroot /mnt snapper -c root create-config /
+chmod 750 /.snapshots
+chown :wheel /.snapshots
+sed -i 's/ALLOW_USERS=""/ALLOW_USERS="'"$USER"'"/' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_MONTHLY="10"/TIMELINE_LIMIT_MONTHLY="0"/' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"/' /mnt/etc/snapper/configs/root
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./Base/services.txt
