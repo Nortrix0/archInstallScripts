@@ -11,3 +11,5 @@ btrfs-progs
 rsync
 snapper
 snap-pac
+grub
+grub-btrfs
