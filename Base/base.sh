@@ -10,7 +10,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
 echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
 #Config mkinitcpio
-#echo 'HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems)' >> /mnt/etc/mkinitcpio.conf
+echo 'HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems)' >> /mnt/etc/mkinitcpio.conf
 #Configure System
 ln -sfr /mnt/usr/share/zoneinfo/America/Chicago /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
