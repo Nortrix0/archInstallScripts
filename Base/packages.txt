@@ -7,3 +7,7 @@ efibootmgr
 vim
 nano
 git
+btrfs-progs
+rsync
+snapper
+snap-pac
