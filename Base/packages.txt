@@ -13,3 +13,4 @@ snapper
 snap-pac
 grub
 grub-btrfs
+inotify-tools
