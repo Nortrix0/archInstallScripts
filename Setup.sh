@@ -1,7 +1,7 @@
 cd "${0%/*}"
 clear
 #Set to use US Mirrors with HTTPS
-curl https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4 -o /etc/pacman.d/mirrorlist
+curl 'https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4' -o /etc/pacman.d/mirrorlist
 sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
