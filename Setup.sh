@@ -41,9 +41,6 @@ if [[ $DESKTOP == "KDE" ]]; then
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
 fi
 . ./Base/base.sh
-if [[ $DESKTOP == "KDE" ]]; then
-	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /mnt/etc/pacman.conf
-fi
 if [[ $CONFIGS == "Yes" ]]; then
 	. ./KDE/configure.sh
 fi
