@@ -22,7 +22,7 @@ done
 #Mount only new subvolumes
 umount /mnt
 mount -o noatime,discard=async,subvol=@ $ROOT /mnt
-mkdir -p /mnt/{home,.snapshots,/var/log,/var/cache/pacman/pkg}
+mkdir -p /mnt/{home,/var/log,/var/cache/pacman/pkg}
 mount -o noatime,discard=async,subvol=@home $ROOT /mnt/home
 mount -o noatime,discard=async,subvol=@snapshots $ROOT /mnt/.snapshots
 mount -o noatime,discard=async,subvol=@var_log $ROOT /mnt/var/log
