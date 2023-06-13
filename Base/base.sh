@@ -56,8 +56,9 @@ sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
 arch-chroot /mnt snapper --no-dbus -c root create-config /
-chmod 750 /.snapshots
-chown :wheel /.snapshots
+mkdir /mnt/.snapshots
+chmod 750 /mnt/.snapshots
+chown :wheel /mnt/.snapshots
 sed -i 's/ALLOW_USERS=""/ALLOW_USERS="'"$USER"'"/' /mnt/etc/snapper/configs/root
 sed -i 's/TIMELINE_LIMIT_MONTHLY="10"/TIMELINE_LIMIT_MONTHLY="0"/' /mnt/etc/snapper/configs/root
 sed -i 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"/' /mnt/etc/snapper/configs/root
