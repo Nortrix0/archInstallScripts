@@ -2,10 +2,10 @@ cp -r ./KDE/KDE_Config_dotfiles /mnt/home/$USER/.config
 cp -r ./KDE/KDE_Local_dotfiles /mnt/home/$USER/.local
 #khotkeysrc kglobalshortcutsrc
 
-if [ $BOOTLOADER == "grub" ]; then
+#if [ $BOOTLOADER == "grub" ]; then
     sed -i 's|#GRUB_THEME=.*|GRUB_THEME="/usr/share/grub/themes/breeze/theme.txt"|' /mnt/etc/default/grub
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
-fi
+#fi
 
 arch-chroot /mnt ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 arch-chroot /mnt chown -R "$USER" /home/$USER/.config /home/$USER/.local
