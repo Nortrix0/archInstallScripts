@@ -55,7 +55,7 @@ echo "$USER:$USERPASS" | chpasswd -R /mnt
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
-arch-chroot /mnt snapper -c root create-config /
+arch-chroot /mnt snapper --no-dbus -c root create-config /
 chmod 750 /.snapshots
 chown :wheel /.snapshots
 sed -i 's/ALLOW_USERS=""/ALLOW_USERS="'"$USER"'"/' /mnt/etc/snapper/configs/root
