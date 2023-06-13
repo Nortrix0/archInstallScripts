@@ -10,4 +10,5 @@ fi
 arch-chroot /mnt ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 arch-chroot /mnt chown -R "$USER" /home/$USER/.config /home/$USER/.local
 
+sed -i 's/Numlock=.*/Numlock=on/' /usr/lib/sddm/sddm.conf.d/default.conf
 rm /mnt/usr/share/applications/{assistant.desktop,avahi-discover.desktop,bssh.desktop,bvnc.desktop,designer.desktop,linguist.desktop,org.kde.kuserfeedback-console.desktop,org.kde.plasma.emojier.desktop,qdbusviewer.desktop,qv4l2.desktop,qvidcap.desktop}
