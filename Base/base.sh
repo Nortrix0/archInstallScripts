@@ -33,7 +33,7 @@ mount $ESP /mnt/boot                #Mounts ESP
 microcode=$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")
 sed -i "s|microcode|$microcode|" ./Base/packages.txt
 #Install base system
-pacstrap -c /mnt --needed - < ./Base/packages.txt
+pacstrap /mnt --needed - < ./Base/packages.txt
 echo $HOSTNAME > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
