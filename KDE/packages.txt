@@ -29,3 +29,4 @@ plasma-nm
 hunspell-en_us
 steam
 breeze-grub
+plasma-wayland-session
