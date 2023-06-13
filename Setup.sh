@@ -1,11 +1,13 @@
 cd "${0%/*}"
 clear
 #Set to use US Mirrors with HTTPS
-curl 'https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4' -o /etc/pacman.d/mirrorlist
-sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
+#curl 'https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4' -o /etc/pacman.d/mirrorlist
+#sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
-pacman -Sy dialog --noconfirm
+pacman -Sy dialog reflector --noconfirm
+mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+reflector --latest 5 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist
 DISK=$(dialog --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpSo NAME,SIZE) 3>&1 1>&2 2>&3 3>&-)
 kernel=$(dialog --nocancel --radiolist "Select Kernel" 0 0 2 linux Stable on linux-hardened Hardened off linux-lts Longterm off 3>&1 1>&2 2>&3 3>&-)
 sed -i "s|KERNEL|$kernel|" ./Base/packages.txt
