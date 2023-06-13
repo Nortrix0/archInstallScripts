@@ -35,7 +35,7 @@ sed -i "s|microcode|$microcode|" ./Base/packages.txt
 
 RESULT=$?
 until pacstrap /mnt --needed - < ./Base/packages.txt; do
-	if [$? -ne 0]; then
+	if [ $? -ne 0 ]; then
 		echo "Failed Getting Packages, will try again in 5 Seconds.  Press Control+C to cancel"
 		sleep 5
 	fi
