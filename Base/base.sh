@@ -69,4 +69,5 @@ while read s; do
 done <./Base/services.txt
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+arch-chroot /mnt ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 arch-chroot /mnt snapper --no-dbus -c root create -d "**Base system install**"
