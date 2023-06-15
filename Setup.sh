@@ -6,10 +6,11 @@ clear
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 pacman -Sy dialog --noconfirm
-mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
-reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist
+#mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+#reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist
 DISK=$(dialog --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpSo NAME,SIZE) 3>&1 1>&2 2>&3 3>&-)
-kernel=$(dialog --nocancel --radiolist "Select Kernel" 0 0 2 linux Stable on linux-hardened Hardened off linux-lts Longterm off 3>&1 1>&2 2>&3 3>&-)
+#kernel=$(dialog --nocancel --radiolist "Select Kernel" 0 0 2 linux Stable on linux-hardened Hardened off linux-lts Longterm off 3>&1 1>&2 2>&3 3>&-)
+kernel=linux
 sed -i "s|KERNEL|$kernel|" ./Base/packages.txt
 HOSTNAME=$(dialog --nocancel --inputbox "Enter Hostname" 0 0 "ArchAuto" 3>&1 1>&2 2>&3 3>&-)
 while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
