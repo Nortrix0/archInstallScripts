@@ -15,19 +15,19 @@ ROOT="/dev/disk/by-partlabel/ROOT"
 mkfs.btrfs -f $ROOT                #Makes Conatiner BTRFS
 mount $ROOT /mnt                   #Mounts BTRFS
 #Create BTRFS subvolumes
-for volume in @ @home @etc @usr @var_log @var_pkgs
+for volume in @ @home @var_log
 do
     btrfs subvolume create /mnt/$volume
 done
 #Mount only new subvolumes
 umount /mnt
 mount -o noatime,discard=async,subvol=@ $ROOT /mnt
-mkdir -p /mnt/{home, etc, usr,/var/log,/var/cache/pacman/pkg}
+mkdir -p /mnt/{home,/var/log}
 mount -o noatime,discard=async,subvol=@home $ROOT /mnt/home
-mount -o noatime,discard=async,subvol=@etc $ROOT /mnt/etc
-mount -o noatime,discard=async,subvol=@usr $ROOT /mnt/usr
+#mount -o noatime,discard=async,subvol=@etc $ROOT /mnt/etc
+#mount -o noatime,discard=async,subvol=@usr $ROOT /mnt/usr
 mount -o noatime,discard=async,subvol=@var_log $ROOT /mnt/var/log
-mount -o noatime,discard=async,subvol=@var_pkgs $ROOT /mnt/var/cache/pacman/pkg
+#mount -o noatime,discard=async,subvol=@var_pkgs $ROOT /mnt/var/cache/pacman/pkg
 mkdir /mnt/boot
 mount $ESP /mnt/boot                #Mounts ESP
 #Determine Microcode
@@ -58,9 +58,7 @@ sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
 arch-chroot /mnt snapper --no-dbus -c root create-config /
-mkdir /mnt/.snapshots
-chmod 750 /mnt/.snapshots
-chown :wheel /mnt/.snapshots
+arch-chroot /mnt chown :wheel /.snapshots
 sed -i 's/ALLOW_USERS=""/ALLOW_USERS="'"$USER"'"/' /mnt/etc/snapper/configs/root
 sed -i 's/TIMELINE_LIMIT_MONTHLY="10"/TIMELINE_LIMIT_MONTHLY="0"/' /mnt/etc/snapper/configs/root
 sed -i 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"/' /mnt/etc/snapper/configs/root
