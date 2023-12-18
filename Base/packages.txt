@@ -14,3 +14,4 @@ snap-pac
 grub
 grub-btrfs
 inotify-tools
+htop
