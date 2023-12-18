@@ -15,7 +15,6 @@ vlc
 kdeconnect
 kfind
 filelight
-kalendar
 plasma-systemmonitor
 khotkeys
 flameshot
