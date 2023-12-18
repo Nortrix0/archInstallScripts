@@ -15,7 +15,6 @@ vlc
 kdeconnect
 kfind
 filelight
-htop
 kalendar
 plasma-systemmonitor
 khotkeys
