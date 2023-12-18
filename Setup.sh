@@ -22,7 +22,7 @@ while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	USER=$(dialog --nocancel --inputbox "$USER Invalid Must Be At Most 32 Characters And lowercase" 0 0 $(echo "$USER" | tr '[:upper:]' '[:lower:]') 3>&1 1>&2 2>&3 3>&-)
 done
 USERPASS=$(dialog --nocancel --passwordbox "Enter Password for $USER" 0 0 3>&1 1>&2 2>&3 3>&-)
-DESKTOP=$(dialog --nocancel --radiolist "Which Desktop Do You Want?" 0 0 0 KDE "" on Console "" off 3>&1 1>&2 2>&3 3>&-)
+DESKTOP=$(dialog --nocancel --radiolist "Which Desktop Do You Want?" 0 0 0 KDE "" on KDE6 "" off Console "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $DESKTOP == "KDE" ]]; then
 	cat ./KDE/packages.txt >> ./Base/packages.txt
 	cat ./KDE/services.txt >> ./Base/services.txt
@@ -45,10 +45,18 @@ if [[ $DESKTOP == "KDE" ]]; then
 		echo -e "vulkan-virtio\n" >> ./Base/packages.txt
 	fi
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
+else
+	if [[ $DESKTOP == "KDE6" ]]; then
+ 		echo -e "[kde-unstable]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf
+		echo -e "plasma-meta" >> ./Base/packages.txt
+	fi
 fi
 . ./Base/base.sh
 if [[ $CONFIGS == "Yes" ]]; then
 	. ./KDE/configure.sh
+fi
+if [[ $DESKTOP == "KDE6" ]]; then
+	echo -e "[kde-unstable]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /mnt/etc/pacman.conf
 fi
 ADVANCED=$(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ $ADVANCED == "Reboot" ]]; then
