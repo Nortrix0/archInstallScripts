@@ -30,3 +30,4 @@ plasma-wayland-session
 breeze-gtk
 kde-gtk-config
 korganizer
+noto-fonts-emoji
