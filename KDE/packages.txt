@@ -22,7 +22,7 @@ plasma-systemmonitor
 flameshot
 hunspell-en_us
 breeze-grub
-breeze-gtk
+plasma-browser-integration
 xdg-desktop-portal-kde
 noto-fonts-emoji
 kde-gtk-config
