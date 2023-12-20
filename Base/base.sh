@@ -23,8 +23,6 @@ umount /mnt
 mount -o noatime,discard=async,subvol=@ $ROOT /mnt
 mkdir -p /mnt/{home,/var/log}
 mount -o noatime,discard=async,subvol=@home $ROOT /mnt/home
-#mount -o noatime,discard=async,subvol=@etc $ROOT /mnt/etc
-#mount -o noatime,discard=async,subvol=@usr $ROOT /mnt/usr
 mount -o noatime,discard=async,subvol=@var_log $ROOT /mnt/var/log
 #mount -o noatime,discard=async,subvol=@var_pkgs $ROOT /mnt/var/cache/pacman/pkg
 mkdir /mnt/boot
