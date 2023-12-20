@@ -26,3 +26,4 @@ breeze-gtk
 xdg-desktop-portal-kde
 noto-fonts-emoji
 kde-gtk-config
+steam
