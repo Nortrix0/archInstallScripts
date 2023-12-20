@@ -22,5 +22,6 @@ plasma-systemmonitor
 flameshot
 hunspell-en_us
 breeze-grub
+breeze-gtk
 xdg-desktop-portal-kde
 noto-fonts-emoji
