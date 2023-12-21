@@ -7,7 +7,6 @@ plasma-disks
 plasma-pa
 sddm
 konsole
-kate
 dolphin
 firefox
 kolourpaint
