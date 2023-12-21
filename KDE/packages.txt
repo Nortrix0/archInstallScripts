@@ -8,7 +8,6 @@ plasma-pa
 sddm
 konsole
 dolphin
-kwrite
 firefox
 kolourpaint
 kmail
@@ -20,6 +19,7 @@ filelight
 korganizer
 plasma-systemmonitor
 flameshot
+hunspell
 hunspell-en_us
 breeze-grub
 plasma-browser-integration
