@@ -7,7 +7,6 @@ clear
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 pacman -Sy dialog --noconfirm
 #mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
-#reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist
 DISK=$(dialog --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpSo NAME,SIZE) 3>&1 1>&2 2>&3 3>&-)
 #kernel=$(dialog --nocancel --menu "Select Kernel" 0 0 2 linux Stable linux-hardened Hardened linux-lts Longterm 3>&1 1>&2 2>&3 3>&-)
 kernel=linux
@@ -57,6 +56,7 @@ if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
 fi
 cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
+reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 . ./Base/base.sh
 if [[ $CONFIGS == "Yes" ]] then
 	cp -r "./Desktops/$DESKTOP/.config" /mnt/home/$USER/.config 2>/dev/null # Copy contents of .config but ignore errors if it doesn't exist
@@ -64,6 +64,7 @@ if [[ $CONFIGS == "Yes" ]] then
 	arch-chroot /mnt chown -R "$USER" /home/$USER
 	. ./Desktops/$DESKTOP/configure.sh
 fi
+cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 if [[ -f "./Desktops/$DESKTOP/post-install.sh" ]] then
 	. ./Desktops/$DESKTOP/post-install.sh
 fi
