@@ -1,0 +1,15 @@
+The Folders inside of Desktops are used to populate the list of selectable desktops during setup
+
+If the folder includes a no-graphics file, in the base directory, it will not enable the multilib repository or ask the user what Graphics Driver they need
+
+If the folder includes a pre-install.sh script it will automatically run before doing the system install, this should be used for things that are required to function, or any prompts you want to give the user before install
+
+If the folder includes a post-install.sh script it will automatically run after everything else has been installed and configured, this should be used for things that are required to function
+
+If the folder includes a configure.sh script it will prompt the user if they want customized configs and runs inbetween the system install and post-install.sh, this can be used for any special configurations you think the user would like
+
+If the folder includes a .config or .local folder, in the base directory, it will automatically copy them to the users home folder after configure.sh but before post-install.sh, this can be used for changing configs that are difficult or impossible to do with commands and can be used for any special configurations you think the user would like
+
+The packages.txt is where you list all the required packages to install the Desktop, if there are optional packages you think the user may or may not want you can create a seperate file and in the pre-install.sh you can add a prompt and add more lines into packages.txt before they get installed
+
+The services.txt is where you list all the required services to run the Desktop, if there are optional services you think the user may or may not want you can create a seperate file and in the pre-install.sh you can add a prompt and add more lines into packages.txt before they get installed
