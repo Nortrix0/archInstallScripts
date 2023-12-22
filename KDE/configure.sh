@@ -1,5 +1,5 @@
-cp -r ./KDE/KDE_Config_dotfiles /mnt/home/$USER/.config
-cp -r ./KDE/KDE_Local_dotfiles /mnt/home/$USER/.local
+cp -r ./KDE/.config /mnt/home/$USER/.config
+cp -r ./KDE/.local /mnt/home/$USER/.local
 #khotkeysrc kglobalshortcutsrc
 
 arch-chroot /mnt chown -R "$USER" /home/$USER/.config /home/$USER/.local
