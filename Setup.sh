@@ -11,7 +11,9 @@ pacman -Sy dialog --noconfirm
 DISK=$(dialog --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpSo NAME,SIZE) 3>&1 1>&2 2>&3 3>&-)
 #kernel=$(dialog --nocancel --radiolist "Select Kernel" 0 0 2 linux Stable on linux-hardened Hardened off linux-lts Longterm off 3>&1 1>&2 2>&3 3>&-)
 kernel=linux
-sed -i "s|KERNEL|$kernel|" ./Base/packages.txt
+cp ./Base/packages.txt ./install_packages.txt
+cp ./Base/services.txt ./install_services.txt
+sed -i "s|KERNEL|$kernel|" ./install_packages.txt
 HOSTNAME=$(dialog --nocancel --inputbox "Enter Hostname" 0 0 "ArchAuto" 3>&1 1>&2 2>&3 3>&-)
 while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	HOSTNAME=$(dialog --nocancel --inputbox "$HOSTNAME Invalid Must Be At Most 63 Characters And Only Contain A-Z and - but can not start with -" 0 0 "ArchAuto" 3>&1 1>&2 2>&3 3>&-)
@@ -24,31 +26,28 @@ done
 USERPASS=$(dialog --nocancel --passwordbox "Enter Password for $USER" 0 0 3>&1 1>&2 2>&3 3>&-)
 DESKTOP=$(dialog --nocancel --radiolist "Which Desktop Do You Want?" 0 0 0 KDE "" on KDE6 "" off Console "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $DESKTOP == "KDE" ]]; then
-	cat ./KDE/packages.txt >> ./Base/packages.txt
-	cat ./KDE/services.txt >> ./Base/services.txt
+	cat ./KDE/packages.txt >> ./install_packages.txt
+	cat ./KDE/services.txt >> ./install_services.txt
 	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 	if [[ systemd-detect-virt == "none" ]]; then
 		GRAPHICS=$(dialog --nocancel --radiolist "Which Graphics Driver Do You Want" 0 0 0 AMD "" on Intel "" off NVIDIA "" off  3>&1 1>&2 2>&3 3>&-)
 		if [[ $GRAPHICS == "AMD" ]]; then
-			echo -e "lib32-vulkan-radeon\n" >> ./Base/packages.txt
+			echo -e "lib32-vulkan-radeon\n" >> ./install_packages.txt
 		fi
 		if [[ $GRAPHICS == "Intel" ]]; then
-			echo -e "lib32-vulkan-intel\n" >> ./Base/packages.txt
-			echo -e "vulkan-intel\n" >> ./Base/packages.txt
+			echo -e "lib32-vulkan-intel\nvulkan-intel\n" >> ./install_packages.txt
 		fi
 		if [[ $GRAPHICS == "NVIDIA" ]]; then
-			echo -e "lib32-nvidia-utils\n" >> ./Base/packages.txt
-			echo -e "lib32-systemd\n" >> ./Base/packages.txt
+			echo -e "lib32-nvidia-utils\nlib32-systemd\n" >> ./install_packages.txt
 		fi
 	else
-		echo -e "lib32-vulkan-virtio\n" >> ./Base/packages.txt
-		echo -e "vulkan-virtio\n" >> ./Base/packages.txt
+		echo -e "lib32-vulkan-virtio\nvulkan-virtio\n" >> ./install_packages.txt
 	fi
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
 else
 	if [[ $DESKTOP == "KDE6" ]]; then
  		echo -e "[kde-unstable]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf
-		echo -e "plasma-meta" >> ./Base/packages.txt
+		echo -e "plasma-meta" >> ./install_packages.txt
 	fi
 fi
 . ./Base/base.sh
