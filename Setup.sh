@@ -69,4 +69,6 @@ if [[ $USERADVANCED == "Ask Me After Install" ]] then
 	else
 		clear
 	fi
+else
+	reboot
 fi
