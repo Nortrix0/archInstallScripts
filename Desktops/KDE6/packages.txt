@@ -23,5 +23,6 @@ plasma-workspace-wallpapers
 kde-unstable/sddm
 kde-unstable/sddm-kcm
 kde-unstable/xdg-desktop-portal-kde
+kde-unstable/plasma-framework5
 konsole
 firefox
