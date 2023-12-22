@@ -48,8 +48,6 @@ if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 		echo -e "lib32-vulkan-virtio\nvulkan-virtio\n" >> ./install_packages.txt
 	fi
 fi
-cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
-cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 if [[ -f "./Desktops/$DESKTOP/configure.sh" ]] then
 	CONFIGS=$($(dialog --yesno "Do You Want Customized $DESKTOP Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 fi
@@ -57,6 +55,8 @@ USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is do
 if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
 	. ./Desktops/$DESKTOP/pre-install.sh
 fi
+cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
+cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 . ./Base/base.sh
 if [[ $CONFIGS == "Yes" ]] then
 	cp -r "./Desktops/$DESKTOP/.config" /mnt/home/$USER/.config 2>/dev/null # Copy contents of .config but ignore errors if it doesn't exist
