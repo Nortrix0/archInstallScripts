@@ -33,7 +33,7 @@ elif [[ $USEROOT == "New Password" ]] then
 	ROOTPASS=$(dialog --nocancel --passwordbox "Enter Pasword for Root" 0 0 3>&1 1>&2 2>&3 3>&-)
 fi
 DESKTOP=$(dialog --nocancel --menu "Which Desktop Do You Want?" 0 0 0 $(find ./Desktops/* -maxdepth 0 -type d -exec basename {} \; | sed -E 's|(.+)\n?|\1 ​ |g') 3>&1 1>&2 2>&3 3>&-)
-if [[ ! -f "./$DESKTOP/no-graphics" ]] then
+if [[ ! -f "./Desktop/$DESKTOP/no-graphics" ]] then
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
 	if [[ systemd-detect-virt == "none" ]] then
 		GRAPHICS=$(dialog --nocancel --menu "Which Graphics Driver Do You Want" 0 0 0 AMD "" Intel "" NVIDIA "" 3>&1 1>&2 2>&3 3>&-)
