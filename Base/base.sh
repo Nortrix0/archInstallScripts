@@ -1,6 +1,6 @@
 #Delete Old partition scheme
 wipefs -af $DISK    #Force Wipe All on Disk
-sgdisk -Zo $DISK    #Destroys existing GPT/MBR structures and clears out all partition data
+#sgdisk -Zo $DISK    #Destroys existing GPT/MBR structures and clears out all partition data
 #Create new partition scheme
 #Doesn't ask for input from user, Creates New disklabel of type GPT, Create new partition Labeled ESP of type fat32 and is 512 MiB in size
 #, Sets partition as bootable, Create new partition Labeled ROOT that uses the rest of the drive space
