@@ -24,5 +24,6 @@ kde-unstable/sddm
 kde-unstable/sddm-kcm
 kde-unstable/xdg-desktop-portal-kde
 kde-unstable/plasma-framework5
+kde-unstable/plasma-workspace
 konsole
 firefox
