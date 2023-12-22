@@ -36,7 +36,6 @@ DESKTOP=$(dialog --nocancel --menu "Which Desktop Do You Want?" 0 0 0 KDE "" KDE
 if [[ $DESKTOP == "KDE" ]] then
 	cat ./KDE/packages.txt >> ./install_packages.txt
 	cat ./KDE/services.txt >> ./install_services.txt
-	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 	if [[ systemd-detect-virt == "none" ]] then
 		GRAPHICS=$(dialog --nocancel --menu "Which Graphics Driver Do You Want" 0 0 0 AMD "" Intel "" NVIDIA "" 3>&1 1>&2 2>&3 3>&-)
 		if [[ $GRAPHICS == "AMD" ]] then
@@ -54,10 +53,20 @@ elif [[ $DESKTOP == "KDE6" ]] then
  		echo -e "[kde-unstable]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf
 		echo -e "plasma-meta" >> ./install_packages.txt
 fi
+if [[ -f "./$DESKTOP/configure.sh" ]] then
+	CONFIGS=$($(dialog --yesno "Do You Want Customized KDE Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
+fi
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 . ./Base/base.sh
 if [[ $CONFIGS == "Yes" ]] then
-	. ./KDE/configure.sh
+	if [[ -d "./$DESKTOP/.config" ]] then
+ 		cp -r "./$DESKTOP/.config" /mnt/home/$USER/.config
+  	fi
+	if [[ -d "./$DESKTOP/.local" ]] then
+		cp -r "./$DESKTOP/.local" /mnt/home/$USER/.local
+  	fi
+	arch-chroot /mnt chown -R "$USER" /home/$USER
+	. ./$DESKTOP/configure.sh
 fi
 if [[ $DESKTOP == "KDE6" ]] then
 	echo -e "[kde-unstable]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /mnt/etc/pacman.conf
