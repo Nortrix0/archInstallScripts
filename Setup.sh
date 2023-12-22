@@ -14,6 +14,9 @@ kernel=linux
 cp ./Base/packages.txt ./install_packages.txt
 cp ./Base/services.txt ./install_services.txt
 sed -i "s|KERNEL|$kernel|" ./install_packages.txt
+#Determine Microcode
+microcode=$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")
+sed -i "s|microcode|$microcode|" ./install_packages.txt
 HOSTNAME=$(dialog --nocancel --inputbox "Enter Hostname" 0 0 "ArchAuto" 3>&1 1>&2 2>&3 3>&-)
 while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	HOSTNAME=$(dialog --nocancel --inputbox "$HOSTNAME Invalid Must Be At Most 63 Characters And Only Contain A-Z and - but can not start with -" 0 0 "ArchAuto" 3>&1 1>&2 2>&3 3>&-)
