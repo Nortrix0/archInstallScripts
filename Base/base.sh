@@ -27,11 +27,8 @@ mount -o noatime,discard=async,subvol=@var_log $ROOT /mnt/var/log
 #mount -o noatime,discard=async,subvol=@var_pkgs $ROOT /mnt/var/cache/pacman/pkg
 mkdir /mnt/boot
 mount $ESP /mnt/boot                #Mounts ESP
-#Determine Microcode
-microcode=$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")
-sed -i "s|microcode|$microcode|" ./Base/packages.txt
 #Install base system
-until pacstrap /mnt --needed - < ./Base/packages.txt; do
+until pacstrap /mnt --needed - < ./install_packages.txt; do
 	echo "Failed Getting Packages, will try again in 5 Seconds.  Press Control+C to cancel"
 	sleep 5
 done
@@ -58,7 +55,7 @@ arch-chroot /mnt chown :wheel /.snapshots
 sed -i 's/ALLOW_USERS=.*$/ALLOW_USERS="'"$USER"'"/; s/MONTHLY=.*$/MONTHLY="0"/; s/YEARLY=.*$/YEARLY="0"/' /mnt/etc/snapper/configs/root
 while read s; do
 	systemctl enable $s --root=/mnt
-done <./Base/services.txt
+done <./install_services.txt
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
