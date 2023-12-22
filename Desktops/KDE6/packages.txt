@@ -1,1 +1,1 @@
-plasma-meta
+kde-unstable/plasma-meta
