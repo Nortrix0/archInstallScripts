@@ -29,7 +29,7 @@ USERPASS=$(dialog --nocancel --passwordbox "Enter Password for $USER" 0 0 3>&1 1
 USEROOT=$(dialog --nocancel --menu "How do you want ROOT's password?" 0 0 0 "Same As User" "" "New Password" "" "Disabled" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ $USEROOT == "Same As User" ]]; then
 	ROOTPASS=$USERPASS
-else if [[ $USEROOT == "New Password"]]; then
+elif [[ $USEROOT == "New Password"]]; then
 	ROOTPASS=$(dialog --nocancel --passwordbox "Enter Pasword for Root" 0 0 3>&1 1>&2 2>&3 3>&-)
 fi
 DESKTOP=$(dialog --nocancel --menu "Which Desktop Do You Want?" 0 0 0 KDE "" KDE6 "" Console "" 3>&1 1>&2 2>&3 3>&-)
@@ -52,11 +52,9 @@ if [[ $DESKTOP == "KDE" ]]; then
 		echo -e "lib32-vulkan-virtio\nvulkan-virtio\n" >> ./install_packages.txt
 	fi
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
-else
-	if [[ $DESKTOP == "KDE6" ]]; then
+elif [[ $DESKTOP == "KDE6" ]]; then
  		echo -e "[kde-unstable]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf
 		echo -e "plasma-meta" >> ./install_packages.txt
-	fi
 fi
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 . ./Base/base.sh
