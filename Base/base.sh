@@ -44,7 +44,11 @@ sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard s
 ln -sfr /mnt/usr/share/zoneinfo/America/Chicago /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
 arch-chroot /mnt locale-gen
-echo "root:$ROOTPASS" | chpasswd -R /mnt
+if [[ $USEROOT == "Disabled" ]]; then
+	arch-chroot /mnt usermod -p '!' root
+else
+	echo "root:$ROOTPASS" | chpasswd -R /mnt
+fi
 useradd -mG wheel -R /mnt "$USER"
 echo "$USER:$USERPASS" | chpasswd -R /mnt
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
