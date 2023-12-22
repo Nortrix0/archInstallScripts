@@ -21,12 +21,17 @@ HOSTNAME=$(dialog --nocancel --inputbox "Enter Hostname" 0 0 "ArchAuto" 3>&1 1>&
 while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	HOSTNAME=$(dialog --nocancel --inputbox "$HOSTNAME Invalid Must Be At Most 63 Characters And Only Contain A-Z and - but can not start with -" 0 0 "ArchAuto" 3>&1 1>&2 2>&3 3>&-)
 done
-ROOTPASS=$(dialog --nocancel --passwordbox "Enter Pasword for Root" 0 0 3>&1 1>&2 2>&3 3>&-)
 USER=$(dialog --nocancel --inputbox "Enter Username" 0 0 "user" 3>&1 1>&2 2>&3 3>&-)
 while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	USER=$(dialog --nocancel --inputbox "$USER Invalid Must Be At Most 32 Characters And lowercase" 0 0 $(echo "$USER" | tr '[:upper:]' '[:lower:]') 3>&1 1>&2 2>&3 3>&-)
 done
 USERPASS=$(dialog --nocancel --passwordbox "Enter Password for $USER" 0 0 3>&1 1>&2 2>&3 3>&-)
+USEROOT=$(dialog --nocancel --radiolist "How do you want ROOT's password?" 0 0 0 "Same As User" "" on "New Password" "" off "Disabled" "" off 3>&1 1>&2 2>&3 3>&-)
+if [[ $USEROOT == "Same As User" ]]; then
+	ROOTPASS=$USERPASS
+else if [[ $USEROOT == "New Password"]]; then
+	ROOTPASS=$(dialog --nocancel --passwordbox "Enter Pasword for Root" 0 0 3>&1 1>&2 2>&3 3>&-)
+fi
 DESKTOP=$(dialog --nocancel --radiolist "Which Desktop Do You Want?" 0 0 0 KDE "" on KDE6 "" off Console "" off 3>&1 1>&2 2>&3 3>&-)
 if [[ $DESKTOP == "KDE" ]]; then
 	cat ./KDE/packages.txt >> ./install_packages.txt
