@@ -29,7 +29,7 @@ USERPASS=$(dialog --nocancel --passwordbox "Enter Password for $USER" 0 0 3>&1 1
 USEROOT=$(dialog --nocancel --menu "How do you want ROOT's password?" 0 0 0 "Same As User" "" "New Password" "" "Disabled" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ $USEROOT == "Same As User" ]] then
 	ROOTPASS=$USERPASS
-elif [[ $USEROOT == "New Password"]] then
+elif [[ $USEROOT == "New Password" ]] then
 	ROOTPASS=$(dialog --nocancel --passwordbox "Enter Pasword for Root" 0 0 3>&1 1>&2 2>&3 3>&-)
 fi
 DESKTOP=$(dialog --nocancel --menu "Which Desktop Do You Want?" 0 0 0 KDE "" KDE6 "" Console "" 3>&1 1>&2 2>&3 3>&-)
