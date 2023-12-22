@@ -64,6 +64,9 @@ if [[ $CONFIGS == "Yes" ]] then
 	arch-chroot /mnt chown -R "$USER" /home/$USER
 	. ./Desktops/$DESKTOP/configure.sh
 fi
+if [[ -f "./Desktops/$DESKTOP/post-install.sh" ]] then
+	. ./Desktops/$DESKTOP/post-install.sh
+fi
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
 	ADVANCED=$(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-)
 	if [[ $ADVANCED == "Reboot" ]] then
