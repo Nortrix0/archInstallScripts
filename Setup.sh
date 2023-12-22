@@ -33,7 +33,7 @@ elif [[ $USEROOT == "New Password" ]] then
 	ROOTPASS=$(dialog --nocancel --passwordbox "Enter Pasword for Root" 0 0 3>&1 1>&2 2>&3 3>&-)
 fi
 DESKTOP=$(dialog --nocancel --menu "Which Desktop Do You Want?" 0 0 0 $(find ./Desktops/* -maxdepth 0 -type d -exec basename {} \; | sed -E 's|(.+)\n?|\1 ​ |g') 3>&1 1>&2 2>&3 3>&-)
-if [[ ! -f "./Desktop/$DESKTOP/no-graphics" ]] then
+if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
 	if [[ systemd-detect-virt == "none" ]] then
 		GRAPHICS=$(dialog --nocancel --menu "Which Graphics Driver Do You Want" 0 0 0 AMD "" Intel "" NVIDIA "" 3>&1 1>&2 2>&3 3>&-)
@@ -48,21 +48,21 @@ if [[ ! -f "./Desktop/$DESKTOP/no-graphics" ]] then
 		echo -e "lib32-vulkan-virtio\nvulkan-virtio\n" >> ./install_packages.txt
 	fi
 fi
-cat ./$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
-cat ./$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
-if [[ -f "./$DESKTOP/configure.sh" ]] then
+cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
+cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
+if [[ -f "./Desktops/$DESKTOP/configure.sh" ]] then
 	CONFIGS=$($(dialog --yesno "Do You Want Customized $DESKTOP Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 fi
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
-if [[ -f "./$DESKTOP/pre-install.sh" ]] then
-	. ./$DESKTOP/pre-install.sh
+if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
+	. ./Desktops/$DESKTOP/pre-install.sh
 fi
 . ./Base/base.sh
 if [[ $CONFIGS == "Yes" ]] then
-	cp -r "./$DESKTOP/.config" /mnt/home/$USER/.config 2>/dev/null # Copy contents of .config but ignore errors if it doesn't exist
-	cp -r "./$DESKTOP/.local" /mnt/home/$USER/.local 2>/dev/null # Copy contents of .local but ignore errors if it doesn't exist
+	cp -r "./Desktops/$DESKTOP/.config" /mnt/home/$USER/.config 2>/dev/null # Copy contents of .config but ignore errors if it doesn't exist
+	cp -r "./Desktops/$DESKTOP/.local" /mnt/home/$USER/.local 2>/dev/null # Copy contents of .local but ignore errors if it doesn't exist
 	arch-chroot /mnt chown -R "$USER" /home/$USER
-	. ./$DESKTOP/configure.sh
+	. ./Desktops/$DESKTOP/configure.sh
 fi
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
 	ADVANCED=$(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-)
