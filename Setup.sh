@@ -31,7 +31,7 @@ if [[ $USEROOT == "Same As User" ]] then
 elif [[ $USEROOT == "New Password" ]] then
 	ROOTPASS=$(dialog --nocancel --passwordbox "Enter Pasword for Root" 0 0 3>&1 1>&2 2>&3 3>&-)
 fi
-DESKTOP=$(dialog --nocancel --menu "Which Desktop Do You Want?" 0 0 0 $(find ./Desktops/* -maxdepth 0 -type d -exec basename {} \; | sed -E 's|(.+)\n?|\1 ​ |g') 3>&1 1>&2 2>&3 3>&-)
+DESKTOP=$(dialog --nocancel --menu "Which Desktop Do You Want?" 0 0 0 $(find ./Desktops/* -maxdepth 0 -type d  -printf '%f ​ ') 3>&1 1>&2 2>&3 3>&-)
 if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
 	if [[ systemd-detect-virt == "none" ]] then
@@ -49,7 +49,7 @@ if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 fi
 if [[ -d "./Desktops/$DESKTOP/Configs" ]] then
 	#CONFIGS=$($(dialog --yesno "Do You Want Customized $DESKTOP Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
-	CONFIGS=$(dialog --nocancel --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 "No Config" ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -exec basename {} \; | sed -E 's|(.+)\n?|\1 ​ |g') 3>&1 1>&2 2>&3 3>&-)
+	CONFIGS=$(dialog --nocancel --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3 3>&-)
 fi
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
