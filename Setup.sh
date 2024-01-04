@@ -54,6 +54,8 @@ fi
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
 	. ./Desktops/$DESKTOP/pre-install.sh
+elif [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh" ]] then
+	. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh
 fi
 cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
@@ -68,6 +70,8 @@ fi
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 if [[ -f "./Desktops/$DESKTOP/post-install.sh" ]] then
 	. ./Desktops/$DESKTOP/post-install.sh
+elif [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh" ]] then
+	. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh
 fi
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
 	ADVANCED=$(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-)
