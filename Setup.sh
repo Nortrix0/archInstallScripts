@@ -60,7 +60,7 @@ cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 . ./Base/base.sh
-if [[ $CONFIGS != "No Config" ]] then
+if [[ $CONFIGS != "None" ]] then
 	cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/.config" /mnt/home/$USER/.config 2>/dev/null # Copy contents of .config but ignore errors if it doesn't exist
 	cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/.local" /mnt/home/$USER/.local 2>/dev/null # Copy contents of .local but ignore errors if it doesn't exist
 	arch-chroot /mnt chown -R "$USER" /home/$USER
