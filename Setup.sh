@@ -61,10 +61,10 @@ echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 . ./Base/base.sh
 if [[ $CONFIGS != "No Config" ]] then
-	cp -r "./Desktops/$DESKTOP/$CONFIGS/.config" /mnt/home/$USER/.config 2>/dev/null # Copy contents of .config but ignore errors if it doesn't exist
-	cp -r "./Desktops/$DESKTOP/$CONFIGS/.local" /mnt/home/$USER/.local 2>/dev/null # Copy contents of .local but ignore errors if it doesn't exist
+	cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/.config" /mnt/home/$USER/.config 2>/dev/null # Copy contents of .config but ignore errors if it doesn't exist
+	cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/.local" /mnt/home/$USER/.local 2>/dev/null # Copy contents of .local but ignore errors if it doesn't exist
 	arch-chroot /mnt chown -R "$USER" /home/$USER
-	. ./Desktops/$DESKTOP/$CONFIGS/configure.sh
+	. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh
 fi
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 if [[ -f "./Desktops/$DESKTOP/post-install.sh" ]] then
