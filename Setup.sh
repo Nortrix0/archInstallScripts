@@ -47,8 +47,9 @@ if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 		echo -e "lib32-vulkan-virtio\nvulkan-virtio\n" >> ./install_packages.txt
 	fi
 fi
-if [[ -f "./Desktops/$DESKTOP/configure.sh" ]] then
-	CONFIGS=$($(dialog --yesno "Do You Want Customized $DESKTOP Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
+if [[ -d "./Desktops/$DESKTOP/Configs" ]] then
+	#CONFIGS=$($(dialog --yesno "Do You Want Customized $DESKTOP Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
+	CONFIGS=$(dialog --nocancel --menu "Which Desktop Do You Want?" 0 0 0 "No Config" ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -exec basename {} \; | sed -E 's|(.+)\n?|\1 ​ |g') 3>&1 1>&2 2>&3 3>&-)
 fi
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
@@ -59,11 +60,11 @@ cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 . ./Base/base.sh
-if [[ $CONFIGS == "Yes" ]] then
-	cp -r "./Desktops/$DESKTOP/.config" /mnt/home/$USER/.config 2>/dev/null # Copy contents of .config but ignore errors if it doesn't exist
-	cp -r "./Desktops/$DESKTOP/.local" /mnt/home/$USER/.local 2>/dev/null # Copy contents of .local but ignore errors if it doesn't exist
+if [[ $CONFIGS != "No" ]] then
+	cp -r "./Desktops/$DESKTOP/$CONFIGS/.config" /mnt/home/$USER/.config 2>/dev/null # Copy contents of .config but ignore errors if it doesn't exist
+	cp -r "./Desktops/$DESKTOP/$CONFIGS/.local" /mnt/home/$USER/.local 2>/dev/null # Copy contents of .local but ignore errors if it doesn't exist
 	arch-chroot /mnt chown -R "$USER" /home/$USER
-	. ./Desktops/$DESKTOP/configure.sh
+	. ./Desktops/$DESKTOP/$CONFIGS/configure.sh
 fi
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 if [[ -f "./Desktops/$DESKTOP/post-install.sh" ]] then
