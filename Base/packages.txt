@@ -15,4 +15,3 @@ grub
 grub-btrfs
 inotify-tools
 htop
-archlinux-keyring

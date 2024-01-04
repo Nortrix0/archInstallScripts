@@ -5,7 +5,7 @@ clear
 #sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
-pacman -Sy dialog --noconfirm
+pacman -Sy dialog archlinux-keyring --noconfirm
 #mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 DISK=$(dialog --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpSo NAME,SIZE) 3>&1 1>&2 2>&3 3>&-)
 #kernel=$(dialog --nocancel --menu "Select Kernel" 0 0 2 linux Stable linux-hardened Hardened linux-lts Longterm 3>&1 1>&2 2>&3 3>&-)
