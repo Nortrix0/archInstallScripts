@@ -51,14 +51,14 @@ if [[ -d "./Desktops/$DESKTOP/Configs" ]] then
 else
 	CONFIGS="None"
 fi
+BACKUP=$(dialog --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3 3>&-)
+USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
 	. ./Desktops/$DESKTOP/pre-install.sh
 fi
 if [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh" ]] then
 	. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh
 fi
-BACKUP=$(dialog --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3 3>&-)
-USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 cat ./Services/Backup/$BACKUP/packages.txt >> ./install_packages.txt 2>/dev/null
