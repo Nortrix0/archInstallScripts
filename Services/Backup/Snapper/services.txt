@@ -1,0 +1,6 @@
+snapper-timeline.timer
+snapper-cleanup.timer
+btrfs-scrub@-.timer
+btrfs-scrub@home.timer
+btrfs-scrub@var_log.timer
+btrfs-scrub@\\x2esnapshots.timer

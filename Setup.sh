@@ -6,7 +6,6 @@ clear
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 pacman -Sy dialog archlinux-keyring --noconfirm
-#mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 DISK=$(dialog --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpSo NAME,SIZE) 3>&1 1>&2 2>&3 3>&-)
 #kernel=$(dialog --nocancel --menu "Select Kernel" 0 0 2 linux Stable linux-hardened Hardened linux-lts Longterm 3>&1 1>&2 2>&3 3>&-)
 kernel=linux
@@ -48,23 +47,30 @@ if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 	fi
 fi
 if [[ -d "./Desktops/$DESKTOP/Configs" ]] then
-	#CONFIGS=$($(dialog --yesno "Do You Want Customized $DESKTOP Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 	CONFIGS=$(dialog --nocancel --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3 3>&-)
+else
+	CONFIGS="None"
 fi
+BACKUP=$(dialog --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3 3>&-)
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
 	. ./Desktops/$DESKTOP/pre-install.sh
-elif [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh" ]] then
+fi
+if [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh" ]] then
 	. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh
 fi
 cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
+cat ./Services/Backup/$BACKUP/packages.txt >> ./install_packages.txt 2>/dev/null
+cat ./Services/Backup/$BACKUP/services.txt >> ./install_services.txt 2>/dev/null
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 . ./Base/base.sh
 if [[ $CONFIGS != "None" ]] then
-	cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/Copy/*" /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
+	cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/Copy/." /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
 	arch-chroot /mnt chown -R "$USER" /home/$USER
+	cat ./Desktops/$DESKTOP/Configs/$CONFIGS/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
+	cat ./Desktops/$DESKTOP/Configs/$CONFIGS/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 	. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh
 fi
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist

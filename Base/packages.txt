@@ -9,8 +9,6 @@ nano
 git
 btrfs-progs
 rsync
-snapper
-snap-pac
 grub
 grub-btrfs
 inotify-tools
