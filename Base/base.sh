@@ -62,4 +62,4 @@ arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootl
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt timedatectl set-ntp true
 arch-chroot /mnt ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-cat ./Services/Backup/$BACKUP/create.sh | arch-chroot /mnt
+cat ./Services/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
