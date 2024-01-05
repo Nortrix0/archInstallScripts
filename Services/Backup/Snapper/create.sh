@@ -1,0 +1,1 @@
+arch-chroot /mnt snapper --no-dbus -c root create -d "**Base system install**"

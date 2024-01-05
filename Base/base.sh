@@ -54,11 +54,7 @@ echo "$USER:$USERPASS" | chpasswd -R /mnt
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
-if [[ $BACKUP == "Snapper" ]]; then
-	arch-chroot /mnt snapper --no-dbus -c root create-config /
-	arch-chroot /mnt chown :wheel /.snapshots
-	sed -i 's/ALLOW_USERS=.*$/ALLOW_USERS="'"$USER"'"/; s/MONTHLY=.*$/MONTHLY="0"/; s/YEARLY=.*$/YEARLY="0"/' /mnt/etc/snapper/configs/root
-fi
+. ./Services/Backup/$BACKUP/configure.sh
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
@@ -66,33 +62,4 @@ arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootl
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt timedatectl set-ntp true
 arch-chroot /mnt ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-if [[ $BACKUP == "Snapper" ]]; then
-	arch-chroot /mnt snapper --no-dbus -c root create -d "**Base system install**"
-elif [[ $BACKUP == "Timeshift" ]]; then
-	UUID=blkid -s UUID -o value $ROOT
-	echo '
-	{
-		"backup_device_uuid" : "'$UUID'",
-		"parent_device_uuid" : "",
-		"do_first_run" : "false",
-		"btrfs_mode" : "true",
-		"include_btrfs_home_for_backup" : "true",
-		"include_btrfs_home_for_restore" : "false",
-		"stop_cron_emails" : "true",
-		"schedule_monthly" : "false",
-		"schedule_weekly" : "false",
-		"schedule_daily" : "true",
-		"schedule_hourly" : "false",
-		"schedule_boot" : "false",
-		"count_monthly" : "2",
-		"count_weekly" : "3",
-		"count_daily" : "5",
-		"count_hourly" : "6",
-		"count_boot" : "5",
-		"date_format" : "%Y-%m-%d %H:%M:%S",
-		"exclude" : [
-		],
-		"exclude-apps" : [
-		]
-	}' >> /mnt/etc/timeshift/timeshift.json
-fi
+. ./Services/Backup/$BACKUP/create.sh

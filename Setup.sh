@@ -6,7 +6,6 @@ clear
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 pacman -Sy dialog archlinux-keyring --noconfirm
-#mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 DISK=$(dialog --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpSo NAME,SIZE) 3>&1 1>&2 2>&3 3>&-)
 #kernel=$(dialog --nocancel --menu "Select Kernel" 0 0 2 linux Stable linux-hardened Hardened linux-lts Longterm 3>&1 1>&2 2>&3 3>&-)
 kernel=linux
@@ -62,12 +61,8 @@ BACKUP=$(dialog --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Sna
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
-if [[ $BACKUP == "Timeshift" ]]; then
-	echo "timeshift" >> ./install_packages.txt
-elif [[ $BACKUP == "Snapper" ]]; then
-	echo "snapper" >> ./install_packages.txt
-	echo "snap-pac" >> ./install_packages.txt
-fi
+cat ./Services/Backup/$BACKUP/packages.txt >> ./install_packages.txt 2>/dev/null
+cat ./Services/Backup/$BACKUP/services.txt >> ./install_services.txt 2>/dev/null
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 . ./Base/base.sh
