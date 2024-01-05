@@ -54,9 +54,11 @@ echo "$USER:$USERPASS" | chpasswd -R /mnt
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
-arch-chroot /mnt snapper --no-dbus -c root create-config /
-arch-chroot /mnt chown :wheel /.snapshots
-sed -i 's/ALLOW_USERS=.*$/ALLOW_USERS="'"$USER"'"/; s/MONTHLY=.*$/MONTHLY="0"/; s/YEARLY=.*$/YEARLY="0"/' /mnt/etc/snapper/configs/root
+if [[ $BACKUP == "Snapper" ]]; then
+	arch-chroot /mnt snapper --no-dbus -c root create-config /
+	arch-chroot /mnt chown :wheel /.snapshots
+	sed -i 's/ALLOW_USERS=.*$/ALLOW_USERS="'"$USER"'"/; s/MONTHLY=.*$/MONTHLY="0"/; s/YEARLY=.*$/YEARLY="0"/' /mnt/etc/snapper/configs/root
+fi
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
@@ -64,4 +66,6 @@ arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootl
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt timedatectl set-ntp true
 arch-chroot /mnt ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-arch-chroot /mnt snapper --no-dbus -c root create -d "**Base system install**"
+if [[ $BACKUP == "Snapper" ]]; then
+	arch-chroot /mnt snapper --no-dbus -c root create -d "**Base system install**"
+fi
