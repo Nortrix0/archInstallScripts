@@ -49,6 +49,8 @@ if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 fi
 if [[ -d "./Desktops/$DESKTOP/Configs" ]] then
 	CONFIGS=$(dialog --nocancel --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3 3>&-)
+else
+	CONFIGS="None"
 fi
 if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
 	. ./Desktops/$DESKTOP/pre-install.sh
@@ -62,6 +64,9 @@ cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat
 cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 if [[ $BACKUP == "Timeshift" ]]; then
 	echo "timeshift" >> ./install_packages.txt
+elif [[ $BACKUP == "Snapper" ]]; then
+	echo "snapper" >> ./install_packages.txt
+	echo "snap-pac" >> ./install_packages.txt
 fi
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
