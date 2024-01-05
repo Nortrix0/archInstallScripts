@@ -48,16 +48,16 @@ if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 	fi
 fi
 if [[ -d "./Desktops/$DESKTOP/Configs" ]] then
-	#CONFIGS=$($(dialog --yesno "Do You Want Customized $DESKTOP Configs?" 0 0 3>&1 1>&2 2>&3 3>&-) && echo "Yes" || echo "No")
 	CONFIGS=$(dialog --nocancel --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3 3>&-)
 fi
-USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
 	. ./Desktops/$DESKTOP/pre-install.sh
-elif [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh" ]] then
+fi
+if [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh" ]] then
 	. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh
 fi
-BACKUP=$(dialog --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​) 3>&1 1>&2 2>&3 3>&-)
+BACKUP=$(dialog --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3 3>&-)
+USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 cat ./Desktops/$DESKTOP/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 cat ./Desktops/$DESKTOP/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 if [[ $BACKUP == "Timeshift" ]]; then
