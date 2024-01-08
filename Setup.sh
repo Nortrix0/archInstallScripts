@@ -1,4 +1,18 @@
 cd "${0%/*}"
+while getopts ":d:" option; do
+  case $option in
+    d)
+      ./Setup Debug_Log |& tee ./install_log.txt
+	  exit
+      ;;
+    *)
+      echo "Usage: $0 [-f file_name] [-d directory_name]"
+      ;;
+  esac
+done
+if [[ $1 == "Debug_Log" ]] then
+	set -x
+fi
 clear
 #Set to use US Mirrors with HTTPS
 #curl 'https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4' -o /etc/pacman.d/mirrorlist
@@ -78,6 +92,9 @@ if [[ -f "./Desktops/$DESKTOP/post-install.sh" ]] then
 	. ./Desktops/$DESKTOP/post-install.sh
 elif [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh" ]] then
 	. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh
+fi
+if [[ $1 == "Debug_Log" ]] then
+	cp ./install_log.txt /mnt/home/$USER/Log.txt
 fi
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
 	ADVANCED=$(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-)
