@@ -59,7 +59,7 @@ while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
-grub-mkconfig -o /mnt/boot/grub/grub.cfg
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt timedatectl set-ntp true
 ln -rsf /mnt/run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 cat ./Services/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
