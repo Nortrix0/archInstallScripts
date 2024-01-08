@@ -68,7 +68,7 @@ reflector --latest 20 --protocol https --sort rate --country 'United States' --s
 . ./Base/base.sh
 if [[ $CONFIGS != "None" ]] then
 	cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/Copy/." /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
-	chown -R 1000 /mnt/home/$USER
+	chown -R 1000:1000 /mnt/home/$USER
 	cat ./Desktops/$DESKTOP/Configs/$CONFIGS/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 	cat ./Desktops/$DESKTOP/Configs/$CONFIGS/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 	. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh
