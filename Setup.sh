@@ -1,7 +1,7 @@
 cd "${0%/*}"
-while getopts ":d:" option; do
+while getopts ":D:" option; do
   case $option in
-    d)
+    D)
       ./Setup Debug_Log |& tee ./install_log.txt
 	  exit
       ;;
