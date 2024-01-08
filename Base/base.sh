@@ -39,7 +39,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
 echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
 #Config mkinitcpio
-sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard sd-vconsole lvm2 filesystems fsck grub-btrfs-overlayfs)/' >> /mnt/etc/mkinitcpio.conf
+sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard sd-vconsole lvm2 filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
 #Configure System
 ln -sfr /mnt/usr/share/zoneinfo/America/Chicago /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
