@@ -45,7 +45,7 @@ ln -sfr /mnt/usr/share/zoneinfo/America/Chicago /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
 arch-chroot /mnt locale-gen
 if [[ $USEROOT == "Disabled" ]]; then
-	arch-chroot /mnt usermod -p '!' root
+	passwd -R /mnt -el root
 else
 	echo "root:$ROOTPASS" | chpasswd -R /mnt
 fi
@@ -58,8 +58,8 @@ sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/e
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
-arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
-arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+grub-install --target=x86_64-efi --efi-directory=/mnt/boot/ --bootloader-id=GRUB
+grub-mkconfig -o /mnt/boot/grub/grub.cfg
 arch-chroot /mnt timedatectl set-ntp true
-arch-chroot /mnt ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+ln -rsf /mnt/run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 cat ./Services/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
