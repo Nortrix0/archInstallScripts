@@ -58,7 +58,7 @@ sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/e
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
-grub-install --target=x86_64-efi --efi-directory=/mnt/boot/ --bootloader-id=GRUB
+arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 grub-mkconfig -o /mnt/boot/grub/grub.cfg
 arch-chroot /mnt timedatectl set-ntp true
 ln -rsf /mnt/run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
