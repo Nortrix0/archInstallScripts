@@ -2,7 +2,6 @@ cd "${0%/*}"
 while getopts ":D:" option; do
   case $option in
     D)
-	  set -x
       script -qc "./Setup Debug_Log" ./install.log
 	  exit
       ;;
@@ -13,6 +12,7 @@ while getopts ":D:" option; do
 done
 clear
 if [[ $1 == "Debug_Log" ]] then
+	set -x
 	DEBUG=true
 fi
 #Set to use US Mirrors with HTTPS
