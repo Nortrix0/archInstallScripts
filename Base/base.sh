@@ -24,7 +24,6 @@ mount -o noatime,discard=async,subvol=@ $ROOT /mnt
 mkdir -p /mnt/{home,/var/log}
 mount -o noatime,discard=async,subvol=@home $ROOT /mnt/home
 mount -o noatime,discard=async,subvol=@var_log $ROOT /mnt/var/log
-#mount -o noatime,discard=async,subvol=@var_pkgs $ROOT /mnt/var/cache/pacman/pkg
 mkdir /mnt/boot
 mount $ESP /mnt/boot                #Mounts ESP
 #Install base system
@@ -37,8 +36,6 @@ echo $HOSTNAME > /mnt/etc/hostname
 genfstab -U /mnt >> /mnt/etc/fstab
 #Setup Locale
 localectl set-locale "en_US.UTF-8"
-#echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
-#echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
 #Config mkinitcpio
 sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard sd-vconsole lvm2 filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
 #Configure System
