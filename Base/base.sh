@@ -42,7 +42,7 @@ localectl set-locale "en_US.UTF-8"
 #Config mkinitcpio
 sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard sd-vconsole lvm2 filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
 #Configure System
-ln -sfr /mnt/usr/share/zoneinfo/America/Chicago /mnt/etc/localtime
+ln -srf /mnt/usr/share/zoneinfo/America/Chicago /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
 #arch-chroot /mnt locale-gen
 if [[ $USEROOT == "Disabled" ]]; then
@@ -55,12 +55,12 @@ echo "$USER:$USERPASS" | chpasswd -R /mnt
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 #Pacman Color and ParallelDownloads
 sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
-. ./Services/Backup/$BACKUP/configure.sh
+. ./Programs/Backup/$BACKUP/configure.sh
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt timedatectl set-ntp true
-ln -rsf /mnt/run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
-cat ./Services/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
+#ln -srf /mnt/run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
+cat ./Programs/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
