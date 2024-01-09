@@ -2,7 +2,7 @@ cd "${0%/*}"
 while getopts "d" option; do
   case $option in
     d)
-      script -qc "./Setup Debug_Log" ./install.log
+      script -qc "./Setup.sh Debug_Log" ./install.log
 	  exit
       ;;
     *)
@@ -69,8 +69,12 @@ fi
 BACKUP=$(dialog --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3 3>&-)
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 pacman -Sy archlinux-keyring --noconfirm
-. ./Desktops/$DESKTOP/pre-install.sh
-. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh
+if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
+	. ./Desktops/$DESKTOP/pre-install.sh
+fi
+if [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh" ]] then
+	. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh
+fi
 cat ./Desktops/$DESKTOP/packages.txt ./Services/Backup/$BACKUP/packages.txt ./Desktops/$DESKTOP/Configs/$CONFIGS/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 cat ./Desktops/$DESKTOP/services.txt ./Services/Backup/$BACKUP/services.txt ./Desktops/$DESKTOP/Configs/$CONFIGS/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 echo "Finding best servers, this may take a minute!"
@@ -81,8 +85,12 @@ if [[ $CONFIGS != "None" ]] then
 	. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh
 fi
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-. ./Desktops/$DESKTOP/post-install.sh
-. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh
+if [[ -f "./Desktops/$DESKTOP/post-install.sh" ]] then
+	. ./Desktops/$DESKTOP/post-install.sh
+fi
+if [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh" ]] then
+	. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh
+fi
 chown -R 1000:1000 /mnt/home/$USER
 if [[ $DEBUG == "true" ]] then
 	cp ./install.log /mnt/home/$USER/install.log
