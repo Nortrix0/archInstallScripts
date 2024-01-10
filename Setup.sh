@@ -2,7 +2,7 @@ cd "${0%/*}"
 while getopts "d" option; do
   case $option in
     d)
-      script -qc "bash -xc 'DEBUG=true ./Setup.sh'" ./install.log
+      script -qc "bash -x -c 'DEBUG=true ./Setup.sh'" ./install.log
 	  exit
       ;;
     *)
