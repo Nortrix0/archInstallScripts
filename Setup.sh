@@ -2,7 +2,7 @@ cd "${0%/*}"
 while getopts "d" option; do
   case $option in
     d)
-      script -qc "bash -xc DEBUG=true ./Setup.sh" ./install.log
+      script -qc "bash -xc 'DEBUG=true ./Setup.sh'" ./install.log
 	  exit
       ;;
     *)
@@ -20,8 +20,7 @@ cp ./Base/packages.txt ./install_packages.txt
 cp ./Base/services.txt ./install_services.txt
 sed -i "s|KERNEL|$kernel|" ./install_packages.txt
 #Determine Microcode
-microcode=$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")
-sed -i "s|microcode|$microcode|" ./install_packages.txt
+sed -i "s|microcode|$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")|" ./install_packages.txt
 HOSTNAME=$(dialog --nocancel --inputbox "Enter Hostname" 0 0 "ArchAuto" 3>&1 1>&2 2>&3 3>&-)
 while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
 	HOSTNAME=$(dialog --nocancel --inputbox "$HOSTNAME Invalid Must Be At Most 63 Characters And Only Contain A-Z and - but can not start with -" 0 0 "ArchAuto" 3>&1 1>&2 2>&3 3>&-)
@@ -45,24 +44,25 @@ if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 		if [[ $($GRAPHICS | wc -l) -gt 1 ]] then
 			echo -e "switcheroo-control\n" >> ./install_packages.txt
 		fi
-		if [[ $GRAPHICS | grep -qi 'AMD' ]] then
+		if echo $GRAPHICS | grep -qi 'AMD'; then
 			echo -e "lib32-vulkan-radeon\n" >> ./install_packages.txt
 		fi
-		if [[ $GRAPHICS | grep -qi 'Intel' ]] then
+		if echo $GRAPHICS | grep -qi 'Intel'; then
 			echo -e "lib32-vulkan-intel\nvulkan-intel\n" >> ./install_packages.txt
 		fi
-		if [[ $GRAPHICS | grep -qi 'NVIDIA' ]] then
+		if echo $GRAPHICS | grep -qi 'NVIDIA'; then
 			echo -e "lib32-nvidia-utils\nlib32-systemd\n" >> ./install_packages.txt
 		fi
 	else
 		echo -e "lib32-vulkan-virtio\nvulkan-virtio\n" >> ./install_packages.txt
 	fi
 fi
-if [[ -d "./Desktops/$DESKTOP/Configs" ]] then
-	CONFIGS=$(dialog --nocancel --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3 3>&-)
-else
-	CONFIGS="None"
-fi
+CONFIGS=$( [[ ! -d "./Desktops/$DESKTOP/Configs" ]] && "None" || $(dialog --nocancel --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3 3>&-))
+#if [[ -d "./Desktops/$DESKTOP/Configs" ]] then
+#	CONFIGS=$(dialog --nocancel --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3 3>&-)
+#else
+#	CONFIGS="None"
+#fi
 BACKUP=$(dialog --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3 3>&-)
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
 . ./Desktops/$DESKTOP/pre-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/pre-install.sh NOT FOUND"
@@ -81,8 +81,7 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 chown -R 1000:1000 /mnt/home/$USER
 cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
-	ADVANCED=$(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-)
-	if [[ $ADVANCED == "Reboot" ]] then
+	if [[ $(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-) == "Reboot" ]] then
 		reboot
 	else
 		clear
