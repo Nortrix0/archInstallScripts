@@ -10,6 +10,9 @@ while getopts "d" option; do
       ;;
   esac
 done
+if $DEBUG; then
+	set -x
+fi
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|#Color|Color|;s|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 pacman -Sy dialog --noconfirm
