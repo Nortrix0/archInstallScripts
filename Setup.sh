@@ -81,11 +81,9 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 chown -R 1000:1000 /mnt/home/$USER
 cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
-	if [[ $(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-) == "Reboot" ]] then
-		reboot
-	else
+	if [[ $(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-) == "Manually Edit" ]] then
 		clear
+		exit
 	fi
-else
-	reboot
 fi
+reboot
