@@ -27,7 +27,7 @@ mount -o noatime,discard=async,subvol=@var_log $ROOT /mnt/var/log
 mkdir /mnt/boot
 mount $ESP /mnt/boot                #Mounts ESP
 #Install base system
-until pacstrap /mnt --needed - < ./install_packages.txt; do
+until pacstrap -P /mnt --needed - < ./install_packages.txt; do
 	echo "Failed Getting Packages, will try again in 5 Seconds.  Press Control+C to cancel"
 	sleep 5
 done
@@ -49,8 +49,6 @@ fi
 useradd -mG wheel -R /mnt "$USER"
 echo "$USER:$USERPASS" | chpasswd -R /mnt
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
-#Pacman Color and ParallelDownloads
-sed -i 's/#Color/Color/;s/^#ParallelDownloads.*$/ParallelDownloads = 10/' /mnt/etc/pacman.conf
 . ./Programs/Backup/$BACKUP/configure.sh
 while read s; do
 	systemctl enable $s --root=/mnt
