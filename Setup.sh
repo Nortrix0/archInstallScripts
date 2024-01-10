@@ -2,7 +2,7 @@ cd "${0%/*}"
 while getopts "d" option; do
   case $option in
     d)
-      script -qc "DEBUG=true./Setup.sh" ./install.log
+      script -qc "bash -xc DEBUG=true ./Setup.sh" ./install.log
 	  exit
       ;;
     *)
@@ -10,9 +10,6 @@ while getopts "d" option; do
       ;;
   esac
 done
-if [[ DEBUG == true ]] then
-	set -x
-fi
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 pacman -Sy dialog --noconfirm
@@ -44,12 +41,17 @@ DESKTOP=$(dialog --nocancel --menu "Which Desktop Do You Want?" 0 0 0 $(find ./D
 if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
 	if [[ systemd-detect-virt == "none" ]] then
-		GRAPHICS=$(dialog --nocancel --menu "Which Graphics Driver Do You Want" 0 0 0 AMD "" Intel "" NVIDIA "" 3>&1 1>&2 2>&3 3>&-)
-		if [[ $GRAPHICS == "AMD" ]] then
+		GRAPHICS=$(lspci | grep -i 'VGA\|3D')
+		if [[ $($GRAPHICS | wc -l) -gt 1 ]] then
+			echo -e "switcheroo-control\n" >> ./install_packages.txt
+		fi
+		if [[ $GRAPHICS | grep -qi 'AMD' ]] then
 			echo -e "lib32-vulkan-radeon\n" >> ./install_packages.txt
-		elif [[ $GRAPHICS == "Intel" ]] then
+		fi
+		if [[ $GRAPHICS | grep -qi 'Intel' ]] then
 			echo -e "lib32-vulkan-intel\nvulkan-intel\n" >> ./install_packages.txt
-		else
+		fi
+		if [[ $GRAPHICS | grep -qi 'NVIDIA' ]] then
 			echo -e "lib32-nvidia-utils\nlib32-systemd\n" >> ./install_packages.txt
 		fi
 	else
@@ -63,29 +65,19 @@ else
 fi
 BACKUP=$(dialog --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3 3>&-)
 USEADVANCED=$(dialog --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3 3>&-)
-pacman -Sy archlinux-keyring --noconfirm
-if [[ -f "./Desktops/$DESKTOP/pre-install.sh" ]] then
-	. ./Desktops/$DESKTOP/pre-install.sh
-fi
-if [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh" ]] then
-	. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh
-fi
+. ./Desktops/$DESKTOP/pre-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/pre-install.sh NOT FOUND"
+. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh NOT FOUND"
 cat ./Desktops/$DESKTOP/packages.txt ./Programs/Backup/$BACKUP/packages.txt ./Desktops/$DESKTOP/Configs/$CONFIGS/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 cat ./Desktops/$DESKTOP/services.txt ./Desktops/$DESKTOP/Configs/$CONFIGS/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
+pacman -Sy archlinux-keyring --noconfirm
 . ./Base/base.sh
-if [[ $CONFIGS != "None" ]] then
-	cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/Copy/." /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
-	. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh
-fi
+cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/Copy/." /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
+. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-if [[ -f "./Desktops/$DESKTOP/post-install.sh" ]] then
-	. ./Desktops/$DESKTOP/post-install.sh
-fi
-if [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh" ]] then
-	. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh
-fi
+. ./Desktops/$DESKTOP/post-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/post-install.sh NOT FOUND"
+. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
 chown -R 1000:1000 /mnt/home/$USER
 cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
