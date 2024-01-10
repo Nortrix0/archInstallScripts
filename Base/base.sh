@@ -35,13 +35,12 @@ echo $HOSTNAME > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 #Setup Locale
-localectl set-locale "en_US.UTF-8"
+arch-chroot /mnt localectl set-locale "en_US.UTF-8"
 #Config mkinitcpio
 sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard sd-vconsole lvm2 filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
 #Configure System
-ln -srf /mnt/usr/share/zoneinfo/America/Chicago /mnt/etc/localtime
+ln -srf /mnt/usr/share/zoneinfo/US/Central /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
-#arch-chroot /mnt locale-gen
 if [[ $USEROOT == "Disabled" ]]; then
 	passwd -R /mnt -el root
 else
@@ -59,5 +58,4 @@ done <./install_services.txt
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt timedatectl set-ntp true
-#ln -srf /mnt/run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 cat ./Programs/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
