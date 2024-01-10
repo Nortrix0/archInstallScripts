@@ -35,7 +35,7 @@ echo $HOSTNAME > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 #Setup Locale
-arch-chroot /mnt localectl set-locale "en_US.UTF-8"
+arch-chroot /mnt localectl set-locale "en_US.UTF-8","LANG=en_US.UTF-8"
 #Config mkinitcpio
 sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard sd-vconsole lvm2 filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
 #Configure System

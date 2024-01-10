@@ -2,7 +2,7 @@ cd "${0%/*}"
 while getopts "d" option; do
   case $option in
     d)
-      script -qc "./Setup.sh Debug_Log" ./install.log
+      script -qc "DEBUG=true./Setup.sh" ./install.log
 	  exit
       ;;
     *)
@@ -10,14 +10,9 @@ while getopts "d" option; do
       ;;
   esac
 done
-clear
-if [[ $1 == "Debug_Log" ]] then
+if [[ DEBUG == true ]] then
 	set -x
-	DEBUG=true
 fi
-#Set to use US Mirrors with HTTPS
-#curl 'https://archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4' -o /etc/pacman.d/mirrorlist
-#sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 pacman -Sy dialog --noconfirm
@@ -54,7 +49,7 @@ if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 			echo -e "lib32-vulkan-radeon\n" >> ./install_packages.txt
 		elif [[ $GRAPHICS == "Intel" ]] then
 			echo -e "lib32-vulkan-intel\nvulkan-intel\n" >> ./install_packages.txt
-		elif [[ $GRAPHICS == "NVIDIA" ]] then
+		else
 			echo -e "lib32-nvidia-utils\nlib32-systemd\n" >> ./install_packages.txt
 		fi
 	else
@@ -92,9 +87,7 @@ if [[ -f "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh" ]] then
 	. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh
 fi
 chown -R 1000:1000 /mnt/home/$USER
-if [[ $DEBUG == "true" ]] then
-	cp ./install.log /mnt/home/$USER/install.log
-fi
+cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
 	ADVANCED=$(dialog --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3 3>&-)
 	if [[ $ADVANCED == "Reboot" ]] then
