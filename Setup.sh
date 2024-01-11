@@ -2,7 +2,7 @@ cd "${0%/*}"
 while getopts "d" option; do
   case $option in
     d)
-      script -qc "bash -x -c 'DEBUG=true ./Setup.sh'" ./install.log
+      script -qc "DEBUG=true ./Setup.sh" ./install.log
 	  exit
       ;;
     *)
@@ -49,15 +49,15 @@ echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 pacman -Sy archlinux-keyring --noconfirm
 . ./Base/base.sh
+cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/Copy/." /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
 $(. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
-cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 $(. ./Desktops/$DESKTOP/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/post-install.sh NOT FOUND"
 $(. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
 chown -R 1000:1000 /mnt/home/$USER
-if [[ $USEADVANCED == "Ask Me After Install" ]] || $DEBUG; then
-	ADVANCED=$(whiptail --output-fd 3 --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3)
-	if [[ $ADVANCED == "Manually Edit" ]] || $DEBUG; then
+if $DEBUG || [[ $USEADVANCED == "Ask Me After Install" ]]  then
+	ADVANCED=$( $DEBUG && echo "Manually Edit" || $(whiptail --output-fd 3 --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3))
+	if $DEBUG || [[ $ADVANCED == "Manually Edit" ]] then
 		sleep 1
 		cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
 		clear
