@@ -19,4 +19,6 @@ fi
 DESKTOP=$(whiptail --output-fd 3 --nocancel --menu "Which Desktop Do You Want?" 0 0 0 $(find ./Desktops/* -maxdepth 0 -type d  -printf '%f ​ ') 3>&1 1>&2 2>&3)
 CONFIGS=$( [[ ! -d "./Desktops/$DESKTOP/Configs" ]] && echo "None" || echo $(whiptail --output-fd 3 --nocancel --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3))
 BACKUP=$(whiptail --output-fd 3 --nocancel --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3)
-USEADVANCED=$(whiptail --output-fd 3 --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3)
+if ! $DEBUG; then
+	USEADVANCED=$(whiptail --output-fd 3 --nocancel --menu "Do you want to reboot when install is done?" 0 0 0 "Yes" "" "Ask Me After Install" "" 3>&1 1>&2 2>&3)
+fi

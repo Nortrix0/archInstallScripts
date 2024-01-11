@@ -55,9 +55,9 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 $(. ./Desktops/$DESKTOP/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/post-install.sh NOT FOUND"
 $(. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
 chown -R 1000:1000 /mnt/home/$USER
-if [[ $USEADVANCED == "Ask Me After Install" ]] then
+if [[ $USEADVANCED == "Ask Me After Install" ]] || $DEBUG; then
 	ADVANCED=$(whiptail --output-fd 3 --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3)
-	if [[ $ADVANCED == "Manually Edit" ]] then
+	if [[ $ADVANCED == "Manually Edit" ]] || $DEBUG; then
 		sleep 1
 		cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
 		clear
