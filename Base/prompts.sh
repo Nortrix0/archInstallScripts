@@ -2,11 +2,11 @@ DISK=$(whiptail --output-fd 3 --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnp
 #kernel=$(whiptail --output-fd 3 --nocancel --menu "Select Kernel" 0 0 2 linux Stable linux-hardened Hardened linux-lts Longterm 3>&1 1>&2 2>&3)
 kernel=linux
 HOSTNAME=$(whiptail --output-fd 3 --nocancel --inputbox "Enter Hostname" 0 0 "ArchAuto" 3>&1 1>&2 2>&3)
-while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]]; do
+while ! [[ $HOSTNAME =~ (?!.*\.{2})^[a-zA-Z0-9][a-zA-Z0-9.-]{0,62}[a-zA-Z0-9]$ ]]; do
 	HOSTNAME=$(whiptail --output-fd 3 --nocancel --inputbox "$HOSTNAME Invalid Must Be At Most 63 Characters And Only Contain A-Z and - but can not start with -" 0 0 "ArchAuto" 3>&1 1>&2 2>&3)
 done
-USER=$(whiptail --output-fd 3 --nocancel --inputbox "Enter Username" 0 0 "user" 3>&1 1>&2 2>&3)
-while ! [[ $USER =~ ^[a-z_][a-z0-9_-]{0,30}[$]?$ ]] do
+USER=$(whiptail --output-fd 3 --nocancel --inputbox "Enter Username" 0 0 "" 3>&1 1>&2 2>&3)
+while ! [[ $USER =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]] do
 	USER=$(whiptail --output-fd 3 --nocancel --inputbox "$USER Invalid Must Be At Most 32 Characters And lowercase" 0 0 $(echo "$USER" | tr '[:upper:]' '[:lower:]') 3>&1 1>&2 2>&3)
 done
 USERPASS=$(whiptail --output-fd 3 --nocancel --passwordbox "Enter Password for $USER" 0 0 3>&1 1>&2 2>&3)
