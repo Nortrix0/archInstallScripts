@@ -13,8 +13,6 @@ done
 if $DEBUG; then
 	set -x
 fi
-#Set ParallelDownloads on ArchIso to help speed up install
-sed -i 's|#Color|Color|;s|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 . ./Base/prompts.sh
 cp ./Base/packages.txt ./install_packages.txt
 cp ./Base/services.txt ./install_services.txt
@@ -41,19 +39,21 @@ if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
 		echo -e "lib32-vulkan-virtio\nvulkan-virtio\n" >> ./install_packages.txt
 	fi
 fi
-. ./Desktops/$DESKTOP/pre-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/pre-install.sh NOT FOUND"
-. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh NOT FOUND"
+$(. ./Desktops/$DESKTOP/pre-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/pre-install.sh NOT FOUND"
+$(. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh NOT FOUND"
 cat ./Desktops/$DESKTOP/packages.txt ./Programs/Backup/$BACKUP/packages.txt ./Desktops/$DESKTOP/Configs/$CONFIGS/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
 cat ./Desktops/$DESKTOP/services.txt ./Desktops/$DESKTOP/Configs/$CONFIGS/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
+#Set ParallelDownloads on ArchIso to help speed up install
+sed -i 's|#Color|Color|;s|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 pacman -Sy archlinux-keyring --noconfirm
 . ./Base/base.sh
 cp -r "./Desktops/$DESKTOP/Configs/$CONFIGS/Copy/." /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
-. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
+$(. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-. ./Desktops/$DESKTOP/post-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/post-install.sh NOT FOUND"
-. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
+$(. ./Desktops/$DESKTOP/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/post-install.sh NOT FOUND"
+$(. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
 chown -R 1000:1000 /mnt/home/$USER
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
 	ADVANCED=$(whiptail --output-fd 3 --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3)
