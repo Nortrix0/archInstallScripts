@@ -36,7 +36,7 @@ USEROOT=$(whiptail --output-fd 3 --nocancel --menu "How do you want ROOT's passw
 if [[ $USEROOT == "Same As User" ]] then
 	ROOTPASS=$USERPASS
 elif [[ $USEROOT == "New Password" ]] then
-	ROOTPASS=$(whiptail --output-fd 3 --nocancel --passwordbox "Enter Pasword for Root" 0 0 3>&1 1>&2 2>&3)
+	ROOTPASS=$(whiptail --output-fd 3 --nocancel --passwordbox "Enter Password for Root" 0 0 3>&1 1>&2 2>&3)
 fi
 DESKTOP=$(whiptail --output-fd 3 --nocancel --menu "Which Desktop Do You Want?" 0 0 0 $(find ./Desktops/* -maxdepth 0 -type d  -printf '%f ​ ') 3>&1 1>&2 2>&3)
 if [[ ! -f "./Desktops/$DESKTOP/no-graphics" ]] then
@@ -77,7 +77,8 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 . ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
 chown -R 1000:1000 /mnt/home/$USER
 if [[ $USEADVANCED == "Ask Me After Install" ]] then
-	if [[ echo $(whiptail --output-fd 3 --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3) == "Manually Edit" ]] then
+	ADVANCED=$(whiptail --output-fd 3 --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3)
+	if [[ $ADVANCED == "Manually Edit" ]] then
 		sleep 1
 		cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
 		clear
