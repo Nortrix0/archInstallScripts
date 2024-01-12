@@ -13,3 +13,4 @@ grub
 grub-btrfs
 inotify-tools
 htop
+mkinitcpio
