@@ -1,19 +1,21 @@
 #Delete Old partition scheme
 wipefs -af $DISK    #Force Wipe All on Disk
 sgdisk -Zo $DISK    #Destroys existing GPT/MBR structures and clears out all partition data
+partprobe $DISK                  #Inform Kernel of changes
+sleep 1
 #Create new partition scheme
 #Doesn't ask for input from user, Creates New disklabel of type GPT, Create new partition Labeled ESP of type fat32 and is 512 MiB in size
 #, Sets partition as bootable, Create new partition Labeled ROOT that uses the rest of the drive space
 parted -s $DISK mklabel gpt mkpart ESP fat32 0% 513MiB set 1 esp on mkpart ROOT 513MiB 100%
-partprobe "$DISK"                   #Inform Kernel of changes
+partprobe $DISK                   #Inform Kernel of changes
 sleep 1
 ESP="/dev/disk/by-partlabel/ESP"
 #Format ESP as FAT32
 mkfs.fat -F 32 $ESP
 if $ENCRYPT; then
 	#Create LUKS Container for Root
-	echo -n "$ENCRYPTPASS" | cryptsetup luksFormat "$DISK" -d -        #Create LUKS Container with ENCRYPTPASS
-	echo -n "$ENCRYPTPASS" | cryptsetup open "$DISK" cryptroot -d -    #Unlocks the LUCKS Container
+	echo -n "$ENCRYPTPASS" | cryptsetup luksFormat $DISK -d -        #Create LUKS Container with ENCRYPTPASS
+	echo -n "$ENCRYPTPASS" | cryptsetup open $DISK cryptroot -d -    #Unlocks the LUCKS Container
 	ROOT="/dev/mapper/cryptroot"                                           #Maps the Unlocked Conatiner to BTRFS
 else
 	ROOT="/dev/disk/by-partlabel/ROOT"
