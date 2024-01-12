@@ -10,7 +10,14 @@ sleep 1
 ESP="/dev/disk/by-partlabel/ESP"
 #Format ESP as FAT32
 mkfs.fat -F 32 $ESP
-ROOT="/dev/disk/by-partlabel/ROOT"
+if $ENCRYPT; then
+	#Create LUKS Container for Root
+	echo -n "$ENCRYPTPASS" | cryptsetup luksFormat "$CRYPTROOT" -d -        #Create LUKS Container with ENCRYPTPASS
+	echo -n "$ENCRYPTPASS" | cryptsetup open "$CRYPTROOT" cryptroot -d -    #Unlocks the LUCKS Container
+	ROOT="/dev/mapper/cryptroot"                                           #Maps the Unlocked Conatiner to BTRFS
+else
+	ROOT="/dev/disk/by-partlabel/ROOT"
+fi
 #Format ROOT as BTRFS
 mkfs.btrfs -f $ROOT                #Makes Conatiner BTRFS
 mount $ROOT /mnt                   #Mounts BTRFS
@@ -37,7 +44,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 #Setup Locale
 arch-chroot /mnt localectl set-locale "en_US.UTF-8","LANG=en_US.UTF-8"
 #Config mkinitcpio
-sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard sd-vconsole lvm2 filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
+sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard sd-vconsole lvm2 sd-encrypt filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
 #Configure System
 ln -srf /mnt/usr/share/zoneinfo/US/Central /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
@@ -53,6 +60,9 @@ sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
+if [[ $ENCRYPT == "yes" ]] then
+	sed -i "s|^GRUB_CMDLINE_LINUX=\"\"|GRUB_CMDLINE_LINUX=\"rd.luks.name=$(blkid -s UUID -o value $CRYPTROOT)=cryptroot root=$ROOT\"|g" /mnt/etc/default/grub
+fi
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt timedatectl set-ntp true
