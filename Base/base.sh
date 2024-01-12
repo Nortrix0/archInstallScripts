@@ -62,7 +62,7 @@ sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
-if [[ $ENCRYPT == "yes" ]] then
+if $ENCRYPT; then
 	sed -i "s|^GRUB_CMDLINE_LINUX=\"\"|GRUB_CMDLINE_LINUX=\"rd.luks.name=$(blkid -s UUID -o value $CRYPTROOT)=cryptroot root=$ROOT\"|g" /mnt/etc/default/grub
 fi
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
