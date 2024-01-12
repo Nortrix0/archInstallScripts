@@ -55,15 +55,9 @@ $(. ./Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./De
 $(. ./Desktops/$DESKTOP/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/post-install.sh NOT FOUND"
 $(. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
 chown -R 1000:1000 /mnt/home/$USER
-if $DEBUG || [[ $USEADVANCED == "Ask Me After Install" ]]  then
-	ADVANCED=$( $DEBUG && echo "Manually Edit" || $(whiptail --output-fd 3 --nocancel --menu "What would you like to do?" 0 0 0 "Reboot" "" "Manually Edit" "" 3>&1 1>&2 2>&3))
-	if $DEBUG || [[ $ADVANCED == "Manually Edit" ]] then
-		sleep 1
-		cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
-		clear
-		exit
-	fi
-fi
 sleep 1
 cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
-reboot
+if [[ $REBOOT == "yes"  ]]  then
+		reboot
+fi
+clear
