@@ -1,5 +1,8 @@
 DISK=$(whiptail --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpSo NAME,SIZE | grep -E '.*[0-9]{2,}.*G$|.*T$') 3>&1 1>&2 2>&3)
 ENCRYPT=$(whiptail --yesno "Do you want to have the Drive Encrypted?" 0 0 0 3>&1 1>&2 2>&3 && echo true || echo false)
+if $ENCRYPT; then
+    ENCRYPTPASS=$(whiptail --nocancel --passwordbox "Enter Encryption Password" 7 0 3>&1 1>&2 2>&3)
+fi
 #kernel=$(whiptail --nocancel --menu "Select Kernel" 0 0 2 linux Stable linux-hardened Hardened linux-lts Longterm 3>&1 1>&2 2>&3)
 kernel=linux
 HOSTNAME=$(whiptail --nocancel --inputbox "Enter Hostname" 0 0 "ArchAuto" 3>&1 1>&2 2>&3)
