@@ -12,8 +12,8 @@ ESP="/dev/disk/by-partlabel/ESP"
 mkfs.fat -F 32 $ESP
 if $ENCRYPT; then
 	#Create LUKS Container for Root
-	echo -n "$ENCRYPTPASS" | cryptsetup luksFormat "$CRYPTROOT" -d -        #Create LUKS Container with ENCRYPTPASS
-	echo -n "$ENCRYPTPASS" | cryptsetup open "$CRYPTROOT" cryptroot -d -    #Unlocks the LUCKS Container
+	echo -n "$ENCRYPTPASS" | cryptsetup luksFormat "$DISK" -d -        #Create LUKS Container with ENCRYPTPASS
+	echo -n "$ENCRYPTPASS" | cryptsetup open "$DISK" cryptroot -d -    #Unlocks the LUCKS Container
 	ROOT="/dev/mapper/cryptroot"                                           #Maps the Unlocked Conatiner to BTRFS
 else
 	ROOT="/dev/disk/by-partlabel/ROOT"
