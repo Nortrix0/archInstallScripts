@@ -58,6 +58,6 @@ chown -R 1000:1000 /mnt/home/$USER
 sleep 1
 cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
 if $REBOOT; then
-		reboot
+	reboot
 fi
 clear
