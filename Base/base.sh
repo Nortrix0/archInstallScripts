@@ -66,5 +66,6 @@ if $ENCRYPT; then
 fi
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+arch-chroot /mnt mkinitcpio -p $KERNEL
 arch-chroot /mnt timedatectl set-ntp true
 cat ./Programs/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
