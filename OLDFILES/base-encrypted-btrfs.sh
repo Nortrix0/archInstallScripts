@@ -78,7 +78,7 @@ echo '
 127.0.1.1   $hostname.localdomain   $hostname' >>/mnt/etc/hosts
 #Config mkinitcpio //CHANGE TO ECHO
 echo '
-HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems)
+HOOKS=(base systemd autodetect modconf kms keyboard sd-vconsole modconf block sd-encrypt filesystems fsck)
 COMPRESSION=(zstd)' >> /mnt/etc/mkinitcpio.conf
 #Setup LUKS2 encryption in grub
 UUID=$(blkid -s UUID -o value $CRYPTROOT)

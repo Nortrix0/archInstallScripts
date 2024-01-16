@@ -10,7 +10,7 @@ while getopts "d" option; do
       ;;
   esac
 done
-if $DEBUG; then
+if [[ $DEBUG ]] then
 	set -x
 fi
 . ./Base/prompts.sh
@@ -57,7 +57,7 @@ $(. ./Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null) || echo ".
 chown -R 1000:1000 /mnt/home/$USER
 sleep 1
 cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
-if $REBOOT; then
+if [[ $REBOOT ]] then
 	reboot
 fi
 clear
