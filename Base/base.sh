@@ -45,7 +45,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 #Setup Locale
 arch-chroot /mnt localectl set-locale "en_US.UTF-8","LANG=en_US.UTF-8"
 #Config mkinitcpio
-sed -i 's/^HOOKS=.*$/HOOKS=(base systemd autodetect modconf kms block keyboard sd-vconsole lvm2 sd-encrypt filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
+sed -i 's/^HOOKS=.*$/HOOKS=(base udev autodetect modconf kms block keyboard lvm2 encrypt filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
 #Configure System
 ln -srf /mnt/usr/share/zoneinfo/US/Central /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
@@ -62,7 +62,7 @@ while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
 if $ENCRYPT; then
-	sed -i "s|^GRUB_CMDLINE_LINUX=\"\"|GRUB_CMDLINE_LINUX=\"rd.luks.name=$(blkid -s UUID -o value /dev/disk/by-partlabel/ROOT)=cryptroot root=$ROOT\"|g" /mnt/etc/default/grub
+	sed -i "s|^GRUB_CMDLINE_LINUX=\"\"|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(blkid -s UUID -o value /dev/disk/by-partlabel/ROOT):cryptroot root=$ROOT\"|g" /mnt/etc/default/grub
 fi
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
