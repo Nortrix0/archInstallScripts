@@ -28,3 +28,4 @@ xdg-desktop-portal-kde
 noto-fonts-emoji
 kde-gtk-config
 steam
+plasma-wayland-session
