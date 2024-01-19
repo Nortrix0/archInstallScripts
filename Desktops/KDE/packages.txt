@@ -29,3 +29,4 @@ noto-fonts-emoji
 kde-gtk-config
 steam
 plasma-wayland-session
+ark
