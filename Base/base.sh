@@ -64,9 +64,6 @@ done <./install_services.txt
 if $ENCRYPT; then
 	sed -i "s|^GRUB_CMDLINE_LINUX=\"\"|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$(blkid -s UUID -o value /dev/disk/by-partlabel/ROOT):cryptroot root=$ROOT\"|g" /mnt/etc/default/grub
 fi
-if [[ $SHELL == "Default" ]] then
-	arch-chroot /mnt chsh -s /bin/zsh
-fi
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt mkinitcpio -P
