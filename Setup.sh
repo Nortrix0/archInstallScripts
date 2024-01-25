@@ -42,7 +42,7 @@ fi
 $(. ./Desktops/$DESKTOP/pre-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/pre-install.sh NOT FOUND"
 $(. ./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/Configs/$CONFIGS/pre-install.sh NOT FOUND"
 cat ./Desktops/$DESKTOP/packages.txt ./Programs/Backup/$BACKUP/packages.txt ./Desktops/$DESKTOP/Configs/$CONFIGS/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
-cat ./Desktops/$DESKTOP/services.txt ./Desktops/$DESKTOP/Configs/$CONFIGS/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
+cat ./Desktops/$DESKTOP/services.txt ./Programs/Backup/$BACKUP/services.txt ./Desktops/$DESKTOP/Configs/$CONFIGS/services.txt >> ./install_services.txt 2>/dev/null # Cat contents of services.txt but ignore errors if it doesn't exist
 #Set ParallelDownloads on ArchIso to help speed up install
 sed -i 's|#Color|Color|;s|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/pacman.conf
 echo "Finding best servers, this may take a minute!"
