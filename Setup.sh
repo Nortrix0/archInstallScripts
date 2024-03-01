@@ -14,9 +14,9 @@ if [[ $DEBUG ]] then
 	set -x
 fi
 cat ./Repos | while read -r a; do git clone $a; done
-. ./*/Base/prompts.sh
-cp ./*/Base/packages.txt ./install_packages.txt
-cp ./*/Base/services.txt ./install_services.txt
+. ./Base/prompts.sh
+cp ./Base/packages.txt ./install_packages.txt
+cp ./Base/services.txt ./install_services.txt
 sed -i "s|KERNEL|$kernel|" ./install_packages.txt
 #Determine Microcode
 sed -i "s|microcode|$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")|" ./install_packages.txt
@@ -49,7 +49,7 @@ sed -i 's|#Color|Color|;s|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/p
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 pacman -Sy archlinux-keyring --noconfirm
-. ./*/Base/base.sh
+. ./Base/base.sh
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 cp -r "./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/." /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
 $(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
