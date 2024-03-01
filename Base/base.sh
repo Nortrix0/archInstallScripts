@@ -45,7 +45,10 @@ genfstab -U /mnt >> /mnt/etc/fstab
 #Setup Locale
 arch-chroot /mnt localectl set-locale "en_US.UTF-8","LANG=en_US.UTF-8"
 #Config mkinitcpio
-sed -i 's/^HOOKS=.*$/HOOKS=(base udev autodetect modconf kms block keyboard lvm2 encrypt filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
+if $ENCRYPT; then
+	ENCRYPT_HOOKS="lvm2 encrypt"
+fi
+sed -i "s/^HOOKS=.*$/HOOKS=(base udev autodetect modconf kms block keyboard $ENCRYPT_HOOKS filesystems fsck grub-btrfs-overlayfs)/" /mnt/etc/mkinitcpio.conf
 #Configure System
 ln -srf /mnt/usr/share/zoneinfo/US/Central /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
