@@ -57,7 +57,7 @@ fi
 useradd -mG wheel -R /mnt "$USER"
 echo "$USER:$USERPASS" | chpasswd -R /mnt
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
-. ./Programs/Backup/$BACKUP/configure.sh
+. ./*/Programs/Backup/$BACKUP/configure.sh
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
@@ -68,4 +68,4 @@ arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootl
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt mkinitcpio -P
 arch-chroot /mnt timedatectl set-ntp true
-cat ./Programs/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
+cat ./*/Programs/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
