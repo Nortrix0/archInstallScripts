@@ -1,1 +1,0 @@
-timeshift --create --comments "**Base system install**"
