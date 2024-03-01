@@ -21,7 +21,7 @@ elif [[ $USEROOT == "New Password" ]] then
 	ROOTPASS=$(whiptail --nocancel --passwordbox "Enter Password for Root" 7 0 3>&1 1>&2 2>&3)
 fi
 DESKTOP=$(whiptail --nocancel --noitem --menu "Which Desktop Do You Want?" 0 0 0 $(find ./*/Desktops/* -maxdepth 0 -type d  -printf '%f ​ ') 3>&1 1>&2 2>&3)
-CONFIGS=$( [[ ! -d "./Desktops/$DESKTOP/Configs" ]] && echo "None" || echo $(whiptail --nocancel --noitem --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3))
+CONFIGS=$( [[ ! $( find ./*/Desktops/$DESKTOP/Configs) ]] && echo "None" || echo $(whiptail --nocancel --noitem --menu "Do You Want Customized $DESKTOP Configs?" 0 0 0 None ​ $(find ./*/Desktops/$DESKTOP/Configs/* -maxdepth 0 -type d -printf '%f ​ ') 3>&1 1>&2 2>&3))
 BACKUP=$(whiptail --nocancel --noitem --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3)
 REBOOT=$(whiptail --yesno "Do you want to reboot when install is done?" 0 0 0 3>&1 1>&2 2>&3 && echo true || echo false)
 # $(whiptail --nocancel [inputbox passwordbox menu yesno] [menu/noitem] TITLE [passwordbox/7 else/0] 0 [menu/0 yesno/0] TEXT 3>&1 1>&2 2>&3)
