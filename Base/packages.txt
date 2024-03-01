@@ -1,0 +1,16 @@
+base
+base-devel
+KERNEL
+linux-firmware
+microcode
+efibootmgr
+vim
+nano
+git
+btrfs-progs
+rsync
+grub
+grub-btrfs
+inotify-tools
+htop
+mkinitcpio
