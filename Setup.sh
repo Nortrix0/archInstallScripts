@@ -51,7 +51,7 @@ reflector --latest 20 --protocol https --sort rate --country 'United States' --s
 pacman -Sy archlinux-keyring --noconfirm
 . ./Base/base.sh
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-cp -r "./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/." /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
+cp -r ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/. /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
 $(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
 $(. ./*/Desktops/$DESKTOP/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/post-install.sh NOT FOUND"
 $(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
