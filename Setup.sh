@@ -13,7 +13,6 @@ done
 if [[ $DEBUG ]] then
 	set -x
 fi
-cat ./Repos | while read -r a; do git clone $a; done
 . ./Base/prompts.sh
 cp ./Base/packages.txt ./install_packages.txt
 cp ./Base/services.txt ./install_services.txt

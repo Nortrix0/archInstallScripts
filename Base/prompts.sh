@@ -1,3 +1,11 @@
+REPOLIST=$(mktemp)
+for file in ./Repository/*; do
+	echo $(basename "$file") $(<"$file") off >> $REPOLIST
+done
+REPOS=$(whiptail --nocancel --checklist "Select which Repos you want to use" 0 0 5 $REPOLIST)
+for repo in $REPOS; do
+	cat ./Repository/$repo | while read -r a; do git clone $a; done
+done
 DISK=$(whiptail --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpSo NAME,SIZE | grep -E '.*[0-9]{2,}.*G$|.*T$') 3>&1 1>&2 2>&3)
 ENCRYPT=$(whiptail --yesno "Do you want to have the Drive Encrypted?" 0 0 0 3>&1 1>&2 2>&3 && echo true || echo false)
 if $ENCRYPT; then
