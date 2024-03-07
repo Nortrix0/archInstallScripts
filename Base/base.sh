@@ -45,7 +45,10 @@ genfstab -U /mnt >> /mnt/etc/fstab
 #Setup Locale
 arch-chroot /mnt localectl set-locale "en_US.UTF-8","LANG=en_US.UTF-8"
 #Config mkinitcpio
-sed -i 's/^HOOKS=.*$/HOOKS=(base udev autodetect modconf kms block keyboard lvm2 encrypt filesystems fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
+if $ENCRYPT; then
+	ENCRYPT_HOOKS="lvm2 encrypt"
+fi
+sed -i "s/^HOOKS=.*$/HOOKS=(base udev autodetect modconf kms block keyboard $ENCRYPT_HOOKS filesystems fsck grub-btrfs-overlayfs)/" /mnt/etc/mkinitcpio.conf
 #Configure System
 ln -srf /mnt/usr/share/zoneinfo/US/Central /mnt/etc/localtime
 arch-chroot /mnt hwclock --systohc
@@ -57,7 +60,7 @@ fi
 useradd -mG wheel -R /mnt "$USER"
 echo "$USER:$USERPASS" | chpasswd -R /mnt
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /mnt/etc/sudoers
-. ./Programs/Backup/$BACKUP/configure.sh
+. ./*/Programs/Backup/$BACKUP/configure.sh
 while read s; do
 	systemctl enable $s --root=/mnt
 done <./install_services.txt
@@ -68,4 +71,4 @@ arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/ --bootl
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt mkinitcpio -P
 arch-chroot /mnt timedatectl set-ntp true
-cat ./Programs/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
+cat ./*/Programs/Backup/$BACKUP/create.sh | arch-chroot /mnt >> /dev/null
