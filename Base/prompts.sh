@@ -1,7 +1,4 @@
-REPOLIST=$(mktemp)
-for file in ./Repository/*; do
-	echo $(basename "$file") $(<"$file") off >> $REPOLIST
-done
+REPOLIST=$(find ./Repository/* -type f -exec sh -c 'echo -e \"$(basename "{}")\" $(cat "{}") off$"\n"' {} \;)
 REPOS=$(whiptail --nocancel --checklist "Select which Repos you want to use" 0 0 5 $REPOLIST)
 for repo in $REPOS; do
 	cat ./Repository/$repo | while read -r a; do git clone $a; done
