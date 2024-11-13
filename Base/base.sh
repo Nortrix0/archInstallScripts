@@ -51,6 +51,7 @@ fi
 sed -i "s/^HOOKS=.*$/HOOKS=(base udev autodetect modconf kms block keyboard $ENCRYPT_HOOKS filesystems fsck grub-btrfs-overlayfs)/" /mnt/etc/mkinitcpio.conf
 #Configure System
 ln -srf /mnt/usr/share/zoneinfo/US/Central /mnt/etc/localtime
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen && echo "LANG=en_US.UTF-8" > /etc/locale.conf
 arch-chroot /mnt hwclock --systohc
 if [[ $USEROOT == "Disabled" ]]; then
 	passwd -R /mnt -el root
