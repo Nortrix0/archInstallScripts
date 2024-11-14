@@ -49,7 +49,7 @@ echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 pacman -Sy archlinux-keyring --noconfirm
 if [[ -d "./*/Desktops/$DESKTOP/Configs/$CONFIG/Flatpak"]]
-	cat "flatpak" >> ./install_packages.txt
+	echo "flatpak" >> ./install_packages.txt
 fi
 . ./Base/base.sh
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
