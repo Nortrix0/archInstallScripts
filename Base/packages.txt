@@ -14,3 +14,4 @@ grub-btrfs
 inotify-tools
 htop
 mkinitcpio
+fwupd
