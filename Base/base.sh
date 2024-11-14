@@ -43,7 +43,8 @@ echo $HOSTNAME > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 #Setup Locale
-arch-chroot /mnt echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen
+arch-chroot /mnt echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen 
+arch-chroot /mnt locale-gen
 arch-chroot /mnt localectl set-locale "en_US.UTF-8","LANG=en_US.UTF-8"
 #Config mkinitcpio
 if $ENCRYPT; then
