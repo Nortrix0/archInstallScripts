@@ -61,7 +61,7 @@ fi
 if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]; then
 	while read f; do
 		arch-chroot /mnt flatpak install flathub $f
-	done <./install_services.txt
+	done <"./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
 fi
 cp -r ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/. /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
 $(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
