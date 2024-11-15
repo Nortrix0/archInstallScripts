@@ -57,13 +57,13 @@ if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR" ]; then
 	chmod 666 /mnt/etc/pacman.conf
 	arch-chroot /mnt mkdir -m 777 yay
 	arch-chroot /mnt su $USER -c "cd yay && git clone https://aur.archlinux.org/yay.git && makepkg -sD yay"
-	arch-chroot /mnt "pacman -U --noconfirm /yay/yay/yay-1*.pkg.tar.zst"
+	arch-chroot /mnt bash -c "pacman -U --noconfirm /yay/yay/yay-1*.pkg.tar.zst"
 	rm -rf /mnt/yay
 	arch-chroot -u $USER /mnt yay -S --answerclean A --answerdiff N --answeredit N --answerupgrade A - < "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt"
 fi
 if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]; then
 	while read f; do
-		arch-chroot /mnt flatpak install flathub $f
+		arch-chroot /mnt flatpak install -y flathub $f
 	done <"./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
 fi
 cp -r ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/. /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
