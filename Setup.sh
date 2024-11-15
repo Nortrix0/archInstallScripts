@@ -54,16 +54,12 @@ fi
 . ./Base/base.sh
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR" ]; then
-	arch-chroot /mnt git clone https://aur.archlinux.org/yay.git
 	chmod 666 /mnt/etc/pacman.conf
-	chmod 666 /mnt/yay
-	arch-chroot /mnt echo $USERPASS | su - $USER -c "cd /yay/ && makepkg"
+	arch-chroot /mnt su $USER -c "cd tmp && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si"
 	arch-chroot /mnt yay -S --answerclean A --answerdiff N --answeredit N --answerupgrade A - < "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt"
 fi
 if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]; then
-	while read f; do
-		arch-chroot /mnt flatpak install flathub $f
-	done <"./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
+	arch-chroot /mnt flatpak install flathub - < "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
 fi
 cp -r ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/. /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
 $(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
