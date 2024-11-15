@@ -55,7 +55,7 @@ fi
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR" ]; then
 	chmod 666 /mnt/etc/pacman.conf
-	arch-chroot /mnt su $USER -c "cd tmp && git clone https://aur.archlinux.org/yay.git && makepkg -sD yay && echo $USERPASS | sudo -vS && sudo pacman -U --noconfirm ./yay/yay-1*.pkg.tar.zst"
+	arch-chroot /mnt su $USER -c "cd tmp && git clone https://aur.archlinux.org/yay.git && makepkg -sD yay && echo $ROOTPASS | su && pacman -U --noconfirm ./yay/yay-1*.pkg.tar.zst"
 	arch-chroot -u $USER /mnt yay -S --answerclean A --answerdiff N --answeredit N --answerupgrade A - < "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt"
 fi
 if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]; then
