@@ -1,4 +1,4 @@
-REPOLIST=$(find ./Repository/* -type f -exec sh -c 'echo -e $(basename "{}") $(cat "{}") off ' \;)
+REPOLIST=$(find ./Repository/* -type f -exec sh -c 'echo -e $(basename "{}") $(cat "{}") on ' \;)
 REPOS=$(whiptail --nocancel --checklist "Select which Repos you want to use" 0 0 5 $REPOLIST 3>&1 1>&2 2>&3 | sed 's|"||g')
 for repo in $REPOS; do
 	cat ./Repository/$repo | xargs -I {} git clone "{}"
