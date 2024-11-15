@@ -59,7 +59,7 @@ if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR" ]; then
 	arch-chroot /mnt su $USER -c "cd yay && git clone https://aur.archlinux.org/yay.git && makepkg -sD yay"
 	arch-chroot /mnt bash -c "pacman -U --noconfirm /yay/yay/yay-1*.pkg.tar.zst"
 	rm -rf /mnt/yay
-	arch-chroot -u $USER /mnt yay -S --answerclean A --answerdiff N --answeredit N --answerupgrade A - < "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt"
+	arch-chroot -u $USER /mnt yay -S --answerclean N --answerdiff N --answeredit N --answerupgrade N - < "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt"
 fi
 if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]; then
 	while read f; do
