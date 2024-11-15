@@ -48,22 +48,22 @@ sed -i 's|#Color|Color|;s|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/p
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 pacman -Sy archlinux-keyring --noconfirm
-if [[ -d "./*/Desktops/$DESKTOP/Configs/$CONFIG/Flatpak" ]] then
+if [[ -d "./*/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]] then
 	echo "flatpak" >> ./install_packages.txt
 fi
 . ./Base/base.sh
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-if [[ -d "./*/Desktops/$DESKTOP/Configs/$CONFIG/AUR" ]] then
+if [[ -d "./*/Desktops/$DESKTOP/Configs/$CONFIGS/AUR" ]] then
 	arch-chroot /mnt git clone https://aur.archlinux.org/yay.git
 	chmod 666 /mnt/etc/pacman.conf
 	chmod 666 /mnt/yay
 	arch-chroot /mnt echo $USERPASS | su - $USER -c "cd /yay/ && makepkg"
-	arch-chroot /mnt yay -S --answerclean A --answerdiff N --answeredit N --answerupgrade A - < "./*/Desktops/$DESKTOP/Configs/$CONFIG/AUR/packages.txt"
+	arch-chroot /mnt yay -S --answerclean A --answerdiff N --answeredit N --answerupgrade A - < "./*/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt"
 fi
-if [[ -d "./*/Desktops/$DESKTOP/Configs/$CONFIG/Flatpak" ]] then
+if [[ -d "./*/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]] then
 	while read f; do
 		arch-chroot /mnt flatpak install flathub $f
-	done <"./*/Desktops/$DESKTOP/Configs/$CONFIG/Flatpak/packages.txt"
+	done <"./*/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
 fi
 cp -r ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/. /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
 $(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
