@@ -34,6 +34,14 @@ mount -o noatime,discard=async,subvol=@home $ROOT /mnt/home
 mount -o noatime,discard=async,subvol=@var_log $ROOT /mnt/var/log
 mkdir /mnt/boot
 mount $ESP /mnt/boot                #Mounts ESP
+if $CHAOTIC; then
+	cat ./*/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt >> ./install_packages.txt 2>/dev/null # Cat contents of packages.txt but ignore errors if it doesn't exist
+	pacman-key --config=/mnt/etc/pacman.conf --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+	pacman-key --config=/mnt/etc/pacman.conf --lsign-key 3056513887B78AEB
+	pacstrap -P /mnt -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+
+	echo "[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" >> /mnt/etc/pacman.confs
+fi
 #Install base system
 until pacstrap -P /mnt --needed - < ./install_packages.txt; do
 	echo "Failed Getting Packages, will try again in 5 Seconds.  Press Control+C to cancel"
