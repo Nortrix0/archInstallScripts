@@ -47,6 +47,8 @@ until pacstrap -P /mnt --needed - < ./install_packages.txt; do
 	echo "Failed Getting Packages, will try again in 5 Seconds.  Press Control+C to cancel"
 	sleep 5
 done
+cp /etc/pacman.d/* /mnt/etc/pacman.d/
+cp /usr/share/pacman/keyrings/* /mnt/usr/share/pacman/keyrings/
 echo $HOSTNAME > /mnt/etc/hostname
 #Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
