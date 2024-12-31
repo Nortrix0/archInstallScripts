@@ -14,6 +14,9 @@ if [[ $DEBUG ]] then
 	set -x
 fi
 . ./Base/prompts.sh
+if $REBOOT == "Stop Install Now" then
+	exit
+fi
 cp ./Base/packages.txt ./install_packages.txt
 cp ./Base/services.txt ./install_services.txt
 sed -i "s|KERNEL|$kernel|" ./install_packages.txt
@@ -73,7 +76,7 @@ $(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null) || echo 
 chown -R 1000:1000 /mnt/home/$USER
 sleep 1
 cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
-if $REBOOT; then
+if $REBOOT == "Yes"; then
 	reboot
 fi
 clear
