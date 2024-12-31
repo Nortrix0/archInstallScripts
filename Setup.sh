@@ -30,10 +30,10 @@ if [[ ! -f "./*/Desktops/$DESKTOP/no-graphics" ]] then
 			echo -e "switcheroo-control\n" >> ./install_packages.txt
 		fi
 		if echo $GRAPHICS | grep -qi 'AMD'; then
-			echo -e "lib32-vulkan-radeon\n" >> ./install_packages.txt
+			echo -e "lib32-vulkan-radeon\nlib32-mesa\n" >> ./install_packages.txt
 		fi
 		if echo $GRAPHICS | grep -qi 'Intel'; then
-			echo -e "lib32-vulkan-intel\nvulkan-intel\n" >> ./install_packages.txt
+			echo -e "lib32-vulkan-intel\nlib32-mesa\n" >> ./install_packages.txt
 		fi
 		if echo $GRAPHICS | grep -qi 'NVIDIA'; then
 			echo -e "lib32-nvidia-utils\nlib32-systemd\n" >> ./install_packages.txt
