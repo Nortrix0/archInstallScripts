@@ -39,7 +39,7 @@ if $CHAOTIC; then
 	pacman-key --config=/mnt/etc/pacman.conf --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 	pacman-key --config=/mnt/etc/pacman.conf --lsign-key 3056513887B78AEB
 	pacstrap -P /mnt -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-
+	echo "yay" >> ./install_packages.txt
 	echo "[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" >> /mnt/etc/pacman.confs
 fi
 #Install base system
