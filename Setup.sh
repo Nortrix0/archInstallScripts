@@ -22,7 +22,7 @@ cp ./Base/services.txt ./install_services.txt
 sed -i "s|KERNEL|$kernel|" ./install_packages.txt
 #Determine Microcode
 sed -i "s|microcode|$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")|" ./install_packages.txt
-if [[ ! -f "./*/Desktops/$DESKTOP/no-graphics" ]] then
+if [[ ! find . -type f -path "./\*/Desktops/$DESKTOP/no-graphics" ]] then
 	sed -i -z 's|#\[multilib]\n#|[multilib]\n|' /etc/pacman.conf
 	if [[ systemd-detect-virt == "none" ]] then
 		GRAPHICS=$(lspci | grep -i 'VGA\|3D')
