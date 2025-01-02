@@ -14,7 +14,7 @@ if [[ $DEBUG ]] then
 	set -x
 fi
 . ./Base/prompts.sh
-if $REBOOT == "Stop Install Now"; then
+if [[ $REBOOT == "Stop Install Now" ]] then
 	exit
 fi
 cp ./Base/packages.txt ./install_packages.txt
