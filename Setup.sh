@@ -70,9 +70,9 @@ if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]; then
 	done <"./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
 fi
 cp -r ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/. /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
-$(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
-$(. ./*/Desktops/$DESKTOP/post-install.sh 2>/dev/null) || echo "./Desktops/$DESKTOP/post-install.sh NOT FOUND"
-$(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
+. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
+. ./*/Desktops/$DESKTOP/post-install.sh || echo "./Desktops/$DESKTOP/post-install.sh NOT FOUND"
+. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/post-install.sh NOT FOUND"
 chown -R 1000:1000 /mnt/home/$USER
 sleep 1
 cp ./install.log /mnt/home/$USER/install.log 2>/dev/null # Copy contents of install.log but ignore errors if it doesn't exist
