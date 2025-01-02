@@ -30,6 +30,12 @@ CONFIGS=$( [[ ! $( find ./*/Desktops/$DESKTOP/Configs) ]] && echo "None" || echo
 if [[ $CONFIGS != "None" ]] then
 	CHAOTIC=$(whiptail --yesno "Do you want to use Chaotic AUR?" 0 0 0 3>&1 1>&2 2>&3 && echo true || echo false)
 fi
+if [[ ! -f "./*/Desktops/$DESKTOP/prompts.sh" ]] then
+	. ./*/Desktops/$DESKTOP/prompts.sh
+fi
+if [[ ! -f "./*/Desktops/$DESKTOP/Configs/$CONFIGS/prompts.sh" ]] then
+	. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/prompts.sh
+fi
 BACKUP=$(whiptail --nocancel --noitem --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3)
 REBOOT=$(whiptail --nocancel --noitem --menu "Do you want to reboot when install is done?" 0 0 0 Yes ​ No ​ "Stop Install Now" ​ 3>&1 1>&2 2>&3)
 #REBOOT=$(whiptail --yesno "Do you want to reboot when install is done?" 0 0 0 3>&1 1>&2 2>&3 && echo true || echo false)
