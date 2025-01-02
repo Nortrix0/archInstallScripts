@@ -3,7 +3,7 @@ REPOS=$(whiptail --nocancel --checklist "Select which Repos you want to use" 0 0
 for repo in $REPOS; do
 	cat ./Repository/$repo | xargs -I {} git clone "{}"
 done
-DISK=$(whiptail --nocancel --menu "Select Disk" 0 0 5 $((lsblk -rnpSo NAME,SIZE & lsblk -rnpSo NAME,SIZE & lsblk -rnpvo NAME,SIZE ) | grep -E '.*[0-9]{2,}.*G$|.*T$') 3>&1 1>&2 2>&3)
+DISK=$(whiptail --nocancel --menu "Select Disk" 0 0 5 $(lsblk -rnpo NAME,SIZE | grep -E '.*[0-9]{2,}.*G$|.*T$') 3>&1 1>&2 2>&3)
 ENCRYPT=$(whiptail --yesno "Do you want to have the Drive Encrypted?" 0 0 0 3>&1 1>&2 2>&3 && echo true || echo false)
 if $ENCRYPT; then
     ENCRYPTPASS=$(whiptail --nocancel --passwordbox "Enter Encryption Password" 7 0 3>&1 1>&2 2>&3)
@@ -30,12 +30,8 @@ CONFIGS=$( [[ ! $( find ./*/Desktops/$DESKTOP/Configs) ]] && echo "None" || echo
 if [[ $CONFIGS != "None" ]] then
 	CHAOTIC=$(whiptail --yesno "Do you want to use Chaotic AUR?" 0 0 0 3>&1 1>&2 2>&3 && echo true || echo false)
 fi
-if [[ ! -f "./*/Desktops/$DESKTOP/prompts.sh" ]] then
-	. ./*/Desktops/$DESKTOP/prompts.sh
-fi
-if [[ ! -f "./*/Desktops/$DESKTOP/Configs/$CONFIGS/prompts.sh" ]] then
-	. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/prompts.sh
-fi
+$(. ./*/Desktops/$DESKTOP/prompts.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/prompts.sh NOT FOUND"
+$(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/prompts.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/prompts.sh NOT FOUND"
 BACKUP=$(whiptail --nocancel --noitem --menu "Which Backup Option do you prefer?" 0 0 0 Snapper ​ Timeshift ​ 3>&1 1>&2 2>&3)
 REBOOT=$(whiptail --nocancel --noitem --menu "Do you want to reboot when install is done?" 0 0 0 Yes ​ No ​ "Stop Install Now" ​ 3>&1 1>&2 2>&3)
 #REBOOT=$(whiptail --yesno "Do you want to reboot when install is done?" 0 0 0 3>&1 1>&2 2>&3 && echo true || echo false)
