@@ -13,12 +13,12 @@ done
 if [[ $DEBUG ]] then
 	set -x
 fi
+cp ./Base/packages.txt ./install_packages.txt
+cp ./Base/services.txt ./install_services.txt
 . ./Base/prompts.sh
 if [[ $REBOOT == "Stop Install Now" ]] then
 	exit
 fi
-cp ./Base/packages.txt ./install_packages.txt
-cp ./Base/services.txt ./install_services.txt
 sed -i "s|KERNEL|$kernel|" ./install_packages.txt
 #Determine Microcode
 sed -i "s|microcode|$([[ $(grep vendor_id /proc/cpuinfo) == *"AuthenticAMD"* ]] && echo "amd-ucode" || echo "intel-ucode")|" ./install_packages.txt
