@@ -65,10 +65,10 @@ if [[ $CONFIGS == false ]] && [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/
 	arch-chroot -u $USER /mnt yay -S --answerclean N --answerdiff N --answeredit N --answerupgrade N - < "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt" # NEED TO REMOVE archinstallRepo AND CHANGE WITH *!
 fi
 if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]; then # NEED TO REMOVE archinstallRepo AND CHANGE WITH *!
-	arch-chroot /mnt flatpak install -y $(cat ./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak | grep -vE '^#|^$')
-	#while read f; do
-	#	arch-chroot /mnt flatpak install -y flathub $f
-	#done <"./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
+	#arch-chroot /mnt flatpak install -y $(cat ./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak | grep -vE '^#|^$')
+	while read f; do
+		arch-chroot /mnt flatpak install -y flathub $f
+	done <"./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
 fi
 cp -r ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/. /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
 $(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
