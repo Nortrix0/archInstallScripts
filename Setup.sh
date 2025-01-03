@@ -56,7 +56,7 @@ if [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/Flatpak ) ]]; then
 fi
 . ./Base/base.sh
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-if [[ $CONFIGS == false ]] && [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/AUR ) ]] ; then 
+if [[ $CONFIGS == false ]] && [[ $( find ./*/Desktops/$DESKTOP/Configs/$CONFIGS/AUR ) ]] ; then 
 	chmod 666 /mnt/etc/pacman.conf
 	arch-chroot /mnt mkdir -m 777 yay
 	arch-chroot /mnt su $USER -c "cd yay && git clone https://aur.archlinux.org/yay.git && makepkg -sD yay"
