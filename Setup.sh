@@ -51,12 +51,12 @@ sed -i 's|#Color|Color|;s|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/p
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 pacman -Sy archlinux-keyring --noconfirm
-if [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/Flatpak ]]; then 
+if [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/Flatpak ) ]]; then 
 	echo "flatpak" >> ./install_packages.txt
 fi
 . ./Base/base.sh
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-if [[ $CONFIGS == false ]] && [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/AUR) ]] ; then 
+if [[ $CONFIGS == false ]] && [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/AUR ) ]] ; then 
 	chmod 666 /mnt/etc/pacman.conf
 	arch-chroot /mnt mkdir -m 777 yay
 	arch-chroot /mnt su $USER -c "cd yay && git clone https://aur.archlinux.org/yay.git && makepkg -sD yay"
@@ -64,7 +64,7 @@ if [[ $CONFIGS == false ]] && [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CON
 	rm -rf /mnt/yay
 	arch-chroot -u $USER /mnt yay -S --answerclean N --answerdiff N --answeredit N --answerupgrade N - < "./*/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt" 
 fi
-if [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/Flatpak ]]; then
+if [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/Flatpak ) ]]; then
 	arch-chroot /mnt flatpak install -y $(cat ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak | tr '\n' ' ' | head -c -1)
 	#while read f; do
 	#	arch-chroot /mnt flatpak install -y flathub $f
