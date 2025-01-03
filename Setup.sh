@@ -51,24 +51,24 @@ sed -i 's|#Color|Color|;s|^#ParallelDownloads.*$|ParallelDownloads = 10|' /etc/p
 echo "Finding best servers, this may take a minute!"
 reflector --latest 20 --protocol https --sort rate --country 'United States' --save /etc/pacman.d/mirrorlist # Regenerate mirrorlist to use US based ones
 pacman -Sy archlinux-keyring --noconfirm
-if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]; then # NEED TO REMOVE archinstallRepo AND CHANGE WITH *!
+if [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/Flatpak ]]; then 
 	echo "flatpak" >> ./install_packages.txt
 fi
 . ./Base/base.sh
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-if [[ $CONFIGS == false ]] && [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR" ]; then # NEED TO REMOVE archinstallRepo AND CHANGE WITH *!
+if [[ $CONFIGS == false ]] && [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/AUR) ]] ; then 
 	chmod 666 /mnt/etc/pacman.conf
 	arch-chroot /mnt mkdir -m 777 yay
 	arch-chroot /mnt su $USER -c "cd yay && git clone https://aur.archlinux.org/yay.git && makepkg -sD yay"
 	arch-chroot /mnt bash -c "pacman -U --noconfirm /yay/yay/yay-1*.pkg.tar.zst"
 	rm -rf /mnt/yay
-	arch-chroot -u $USER /mnt yay -S --answerclean N --answerdiff N --answeredit N --answerupgrade N - < "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt" # NEED TO REMOVE archinstallRepo AND CHANGE WITH *!
+	arch-chroot -u $USER /mnt yay -S --answerclean N --answerdiff N --answeredit N --answerupgrade N - < "./*/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt" 
 fi
-if [ -d "./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak" ]; then # NEED TO REMOVE archinstallRepo AND CHANGE WITH *!
-	#arch-chroot /mnt flatpak install -y $(cat ./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak | grep -vE '^#|^$')
-	while read f; do
-		arch-chroot /mnt flatpak install -y flathub $f
-	done <"./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
+if [[ $( find ./*/DesktDesktops/$DESKTOP/Configs/$CONFIGS/Flatpak ]]; then
+	arch-chroot /mnt flatpak install -y $(cat ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak | tr '\n' ' ' | head -c -1)
+	#while read f; do
+	#	arch-chroot /mnt flatpak install -y flathub $f
+	#done <"./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"
 fi
 cp -r ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Copy/. /mnt/home/$USER/ 2>/dev/null # Copy contents of Copy but ignore errors if it doesn't exist
 $(. ./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh 2>/dev/null) || echo "./*/Desktops/$DESKTOP/Configs/$CONFIGS/configure.sh NOT FOUND"
