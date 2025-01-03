@@ -65,7 +65,7 @@ if [[ $CONFIGS == false ]] && [[ $( find ./*/Desktops/$DESKTOP/Configs/$CONFIGS/
 	arch-chroot -u $USER /mnt yay -S --answerclean N --answerdiff N --answeredit N --answerupgrade N - < "./*/Desktops/$DESKTOP/Configs/$CONFIGS/AUR/packages.txt" 
 fi
 if [[ $( find ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak ) ]]; then
-	arch-chroot /mnt flatpak install -y $(cat ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak | tr '\n' ' ' | head -c -1)
+	arch-chroot /mnt flatpak install -y $(cat ./*/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt | tr '\n' ' ' | head -c -1)
 	#while read f; do
 	#	arch-chroot /mnt flatpak install -y flathub $f
 	#done <"./archinstallRepo/Desktops/$DESKTOP/Configs/$CONFIGS/Flatpak/packages.txt"

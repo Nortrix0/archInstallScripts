@@ -18,6 +18,7 @@ if $ENCRYPT; then
 	echo -n "$ENCRYPTPASS" | cryptsetup luksFormat $ROOT -d -        #Create LUKS Container with ENCRYPTPASS
 	echo -n "$ENCRYPTPASS" | cryptsetup open $ROOT cryptroot -d -    #Unlocks the LUCKS Container
 	ROOT="/dev/mapper/cryptroot"                                    #Maps the Unlocked Conatiner to BTRFS
+	echo -e "thin-provisioning-tools\n" >> ./install_packages.txt
 fi
 #Format ROOT as BTRFS
 mkfs.btrfs -f $ROOT                #Makes Conatiner BTRFS
